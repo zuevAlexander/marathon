@@ -1,0 +1,14 @@
+parameters:
+  core.handler.day.class: CoreBundle\Handler\DayHandler
+  core.entity.day.class: CoreBundle\Entity\Day
+  core.service.day.class: CoreBundle\Service\Day\DayService
+services:
+  core.handler.day:
+    class: '%core.handler.day.class%'
+    arguments:
+      - '@core.service.day'
+  core.service.day:
+    class: '%core.service.day.class%'
+    arguments:
+      - '@service_container'
+      - '%core.entity.day.class%'

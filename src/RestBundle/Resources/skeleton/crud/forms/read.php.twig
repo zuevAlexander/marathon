@@ -1,0 +1,24 @@
+<?php
+
+namespace {{ bundle.namespace }}\Form\{{ entity.name_with_namespace }};
+
+{% block use_statements %}
+use {{ request.namespace }}\{{ entity.name }}ReadRequest;
+use RestBundle\Form\AbstractFormType;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}ReadType
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity.name }}ReadType extends AbstractFormType
+{% endblock class_definition %}
+{
+{% block class_body %}
+    use {{ entity.name }}SingleTypeTrait;
+
+    const DATA_CLASS = {{ entity.name }}ReadRequest::class;
+{% endblock class_body %}
+}

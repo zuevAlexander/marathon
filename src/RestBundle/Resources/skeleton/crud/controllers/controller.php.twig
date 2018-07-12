@@ -1,0 +1,70 @@
+<?php
+
+namespace {{ controller.namespace }};
+
+{% block use_statements %}
+{% if 'list' in actions %}
+use {{ form.namespace }}\{{ entity.name }}ListType;
+{% endif %}
+{% if 'create' in actions %}
+use {{ form.namespace }}\{{ entity.name }}CreateType;
+{% endif %}
+{% if 'read' in actions %}
+use {{ form.namespace }}\{{ entity.name }}ReadType;
+{% endif %}
+{% if 'update' in actions %}
+use {{ form.namespace }}\{{ entity.name }}UpdateType;
+{% endif %}
+{% if 'delete' in actions %}
+use {{ form.namespace }}\{{ entity.name }}DeleteType;
+{% endif %}
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RestBundle\Controller\BaseController;
+use RestBundle\Handler\ProcessorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}Controller
+{% endblock phpdoc_class_header %}
+ *
+ * @RouteResource("{{ entity.name }}")
+ */
+{% block class_definition %}
+class {{ entity.name }}Controller extends BaseController
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {%- if 'list' in actions %}
+        {%- include 'crud/controllers/actions/list.php.twig' %}
+    {%- endif %}
+
+    {%- if 'create' in actions %}
+        {%- include 'crud/controllers/actions/create.php.twig' %}
+    {%- endif %}
+
+    {%- if 'read' in actions %}
+        {%- include 'crud/controllers/actions/read.php.twig' %}
+    {%- endif %}
+
+    {%- if 'update' in actions %}
+        {%- include 'crud/controllers/actions/update-put.php.twig' %}
+        {%- include 'crud/controllers/actions/update-patch.php.twig' %}
+    {%- endif %}
+
+    {%- if 'delete' in actions %}
+        {%- include 'crud/controllers/actions/delete.php.twig' %}
+    {%- endif %}
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getProcessor() : ProcessorInterface
+    {
+        return $this->get('core.handler.{{ handler.service_name }}');
+    }
+{% endblock class_body %}
+}

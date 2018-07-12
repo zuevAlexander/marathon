@@ -1,0 +1,17 @@
+parameters:
+  core.handler.user.class: CoreBundle\Handler\UserHandler
+  core.entity.user.class: CoreBundle\Entity\User
+  core.service.user.class: CoreBundle\Service\User\UserService
+services:
+  core.handler.user:
+    class: '%core.handler.user.class%'
+    arguments:
+      - '@core.service.user'
+      - '@security.token_storage'
+  core.service.user:
+    class: '%core.service.user.class%'
+    arguments:
+      - '@service_container'
+      - '%core.entity.user.class%'
+      - "@security.password_encoder"
+      - '@core.service.day'

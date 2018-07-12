@@ -1,0 +1,24 @@
+<?php
+
+namespace {{ bundle.namespace }}\Form\{{ entity.name_with_namespace }};
+
+{% block use_statements %}
+use {{ request.namespace }}\{{ entity.name }}DeleteRequest;
+use RestBundle\Form\AbstractFormType;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}DeleteType
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity.name }}DeleteType extends AbstractFormType
+{% endblock class_definition %}
+{
+{% block class_body %}
+    use {{ entity.name }}SingleTypeTrait;
+
+    const DATA_CLASS = {{ entity.name }}DeleteRequest::class;
+{% endblock class_body %}
+}

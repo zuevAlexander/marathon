@@ -1,0 +1,16 @@
+parameters:
+  core.handler.training.class: CoreBundle\Handler\TrainingHandler
+  core.entity.training.class: CoreBundle\Entity\Training
+  core.service.training.class: CoreBundle\Service\Training\TrainingService
+services:
+  core.handler.training:
+    class: '%core.handler.training.class%'
+    arguments:
+      - '@core.service.training'
+  core.service.training:
+    class: '%core.service.training.class%'
+    arguments:
+      - '@service_container'
+      - '%core.entity.training.class%'
+      - '@core.service.user'
+      - '@core.service.day'

@@ -1,0 +1,92 @@
+[
+    {
+        "referenceName": "user-1",
+        "name": "User-1",
+        "token": "user-token-1",
+        "password": "User-1",
+        "owner": "user-2",
+        "members": [
+            "user-4",
+            "user-4",
+            "user-3",
+            "user-2",
+            "user-5",
+            "user-4",
+            "user-4",
+            "user-1"
+        ],
+        "random_word": "status-open status-closed status-closed"
+    },
+    {
+        "referenceName": "user-2",
+        "name": "User-2",
+        "token": "user-token-2",
+        "password": "User-2",
+        "owner": "user-4",
+        "members": [
+            "user-5",
+            "user-1",
+            "user-2",
+            "user-4",
+            "user-3",
+            "user-4",
+            "user-2",
+            "user-5"
+        ],
+        "random_word": "status-closed status-closed status-closed"
+    },
+    {
+        "referenceName": "user-3",
+        "name": "User-3",
+        "token": "user-token-3",
+        "password": "User-3",
+        "owner": "user-5",
+        "members": [
+            "user-3",
+            "user-1",
+            "user-3",
+            "user-2",
+            "user-4",
+            "user-5",
+            "user-3",
+            "user-2"
+        ],
+        "random_word": "status-open status-open status-open"
+    },
+    {
+        "referenceName": "user-4",
+        "name": "User-4",
+        "token": "user-token-4",
+        "password": "User-4",
+        "owner": "user-5",
+        "members": [
+            "user-1",
+            "user-5",
+            "user-5",
+            "user-2",
+            "user-1",
+            "user-2",
+            "user-4",
+            "user-3"
+        ],
+        "random_word": "status-closed status-closed status-closed"
+    },
+    {
+        "referenceName": "user-5",
+        "name": "User-5",
+        "token": "user-token-5",
+        "password": "User-5",
+        "owner": "user-2",
+        "members": [
+            "user-3",
+            "user-2",
+            "user-4",
+            "user-5",
+            "user-1",
+            "user-2",
+            "user-2",
+            "user-2"
+        ],
+        "random_word": "status-closed status-closed status-open"
+    }
+]

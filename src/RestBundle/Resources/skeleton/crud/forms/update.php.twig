@@ -1,0 +1,38 @@
+<?php
+
+namespace {{ bundle.namespace }}\Form\{{ entity.name_with_namespace }};
+
+{% block use_statements %}
+use {{ request.namespace }}\{{ entity.name }}UpdateRequest;
+use RestBundle\Form\AbstractFormType;
+use Symfony\Component\Form\FormBuilderInterface;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}UpdateType
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity.name }}UpdateType extends AbstractFormType
+{% endblock class_definition %}
+{
+{% block class_body %}
+    use {{ entity.name }}SingleTypeTrait;
+    use {{ entity.name }}AllTypeTrait {
+        {{ entity.name }}AllTypeTrait::buildForm as private buildFormTrait{{ entity.name }}AllType;
+    }
+
+    const DATA_CLASS = {{ entity.name }}UpdateRequest::class;
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $this->buildFormTrait{{ entity.name }}AllType($builder, $options);
+        $this->registerPreSubmitEventListener($builder);
+    }
+{% endblock class_body %}
+}

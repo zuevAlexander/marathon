@@ -1,0 +1,13 @@
+parameters:
+  nd.symfony.fixtures.generator.class: RestBundle\Fixture\FixtureGenerator
+  nd.symfony.http_exception.listener.class: RestBundle\Event\Kernel\HttpKernelExceptionListener
+  nd.symfony.token.listener.class: RestBundle\Event\ProcessorEvent\TokenSetterListener
+
+services:
+  nd.symfony.fixtures.generator:
+    class: "%nd.symfony.fixtures.generator.class%"
+
+  nd.symfony.http_exception.listener:
+      class: "%nd.symfony.http_exception.listener.class%"
+      tags:
+          - { name: kernel.event_subscriber }

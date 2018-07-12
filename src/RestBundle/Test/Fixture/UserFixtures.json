@@ -1,0 +1,32 @@
+[
+    {
+        "referenceName": "user-1",
+        "name": "User-1",
+        "token": "user-token-1",
+        "password": "User-1"
+    },
+    {
+        "referenceName": "user-2",
+        "name": "User-2",
+        "token": "user-token-2",
+        "password": "User-2"
+    },
+    {
+        "referenceName": "user-3",
+        "name": "User-3",
+        "token": "user-token-3",
+        "password": "User-3"
+    },
+    {
+        "referenceName": "user-4",
+        "name": "User-4",
+        "token": "user-token-4",
+        "password": "User-4"
+    },
+    {
+        "referenceName": "user-5",
+        "name": "User-5",
+        "token": "user-token-5",
+        "password": "User-5"
+    }
+]

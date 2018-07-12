@@ -1,0 +1,52 @@
+<?php
+
+{% block namespace %}
+namespace {{ bundle.namespace }}\Model\Request\{{ entity.name_with_namespace }};
+{% endblock namespace %}
+
+
+
+{%- block use_statements %}
+
+use RestBundle\Request\AbstractRequest;
+{% endblock use_statements %}
+
+
+
+{%- block phpdoc_class %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}UpdateRequest
+{% endblock phpdoc_class_header %}
+
+{%- block phpdoc_methods %}
+ *
+{% include 'crud/model/request/includes/phpdoc_has_methods/single.php.twig' %}
+{%- include 'crud/model/request/includes/phpdoc_has_methods/all.php.twig' %}
+{% endblock phpdoc_methods %}
+
+ */
+{% endblock phpdoc_class %}
+
+
+
+{%- block class_definition %}
+class {{ entity.name }}UpdateRequest extends AbstractRequest implements {{ entity.name }}SingleRequestInterface, {{ entity.name }}AllRequestInterface
+{% endblock class_definition %}
+{
+{% block class_body %}
+    use {{ entity.name }}SingleRequestTrait {
+        {{ entity.name }}SingleRequestTrait::__construct as private constructTrait{{ entity.name }}SingleType;
+    }
+    use {{ entity.name }}AllRequestTrait {
+        {{ entity.name }}AllRequestTrait::__construct as private constructTrait{{ entity.name }}AllType;
+    }
+
+    public function __construct()
+    {
+        $this->constructTrait{{ entity.name }}SingleType();
+        $this->constructTrait{{ entity.name }}AllType();
+    }
+{% endblock class_body %}
+}

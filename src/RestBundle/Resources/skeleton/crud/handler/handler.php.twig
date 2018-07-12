@@ -1,0 +1,92 @@
+<?php
+
+namespace {{ handler.namespace }};
+
+{% block use_statements %}
+use {{ bundle.namespace }}\Entity\{{ entity.name_with_namespace }};
+{% if 'list' in actions %}
+use {{ request.namespace }}\{{ entity.name }}ListRequest;
+{% endif %}
+{% if 'create' in actions %}
+use {{ request.namespace }}\{{ entity.name }}CreateRequest;
+{% endif %}
+{% if 'read' in actions %}
+use {{ request.namespace }}\{{ entity.name }}ReadRequest;
+{% endif %}
+{% if 'update' in actions %}
+use {{ request.namespace }}\{{ entity.name }}UpdateRequest;
+{% endif %}
+{% if 'delete' in actions %}
+use {{ request.namespace }}\{{ entity.name }}DeleteRequest;
+{% endif %}
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use {{ bundle.namespace }}\Model\Handler\{{ entity.name_with_namespace }}ProcessorInterface;
+use {{ service.class }};
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}Handler
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity.name }}Handler implements ContainerAwareInterface, {{ entity.name }}ProcessorInterface
+{% endblock class_definition %}
+{
+{% block class_body %}
+    use ContainerAwareTrait;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var {{ entity.name }}Service
+     */
+    private ${{ entity.name_lcfirst }}Service;
+
+    {% block constructor -%}
+    /**
+     * {{ entity.name }}Handler constructor.
+     * @param ContainerInterface $container
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param {{ entity.name }}Service ${{ entity.name_lcfirst }}Service
+     */
+    public function __construct(
+        ContainerInterface $container,
+        EventDispatcherInterface $eventDispatcher,
+        {{ entity.name }}Service ${{ entity.name_lcfirst }}Service
+    ) {
+        $this->setContainer($container);
+        $this->eventDispatcher = $eventDispatcher;
+        $this->{{ entity.name_lcfirst }}Service = ${{ entity.name_lcfirst }}Service;
+    }
+{% endblock constructor %}
+
+
+    {%- if 'list' in actions %}
+        {%- include 'crud/handler/actions/list.php.twig' %}
+    {%- endif %}
+
+    {%- if 'create' in actions %}
+        {%- include 'crud/handler/actions/create.php.twig' %}
+    {%- endif %}
+
+    {%- if 'read' in actions %}
+        {%- include 'crud/handler/actions/read.php.twig' %}
+    {%- endif %}
+
+    {%- if 'update' in actions %}
+        {%- include 'crud/handler/actions/update-put.php.twig' %}
+        {%- include 'crud/handler/actions/update-patch.php.twig' %}
+    {%- endif %}
+
+    {%- if 'delete' in actions %}
+        {%- include 'crud/handler/actions/delete.php.twig' %}
+    {%- endif %}
+{% endblock class_body %}
+}

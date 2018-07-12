@@ -1,0 +1,34 @@
+parameters:
+  guard_bundle.webservice_user_provider.class: GuardBundle\Security\WebserviceUserProvider
+  guard_bundle.password_authenticator.class: GuardBundle\Security\PasswordAuthenticator
+  guard_bundle.token_authenticator.class: GuardBundle\Security\TokenAuthenticator
+  doctrine.metadata.class: Doctrine\ORM\Mapping\ClassMetadata
+
+services:
+  guard_bundle.service.user.metadata:
+    class: '%doctrine.metadata.class%'
+    arguments:
+      - '%guard_bundle.entity.user%'
+
+  guard_bundle.service.user.repository:
+    class: '%guard_bundle.repository.user.class%'
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@guard_bundle.service.user.metadata'
+
+  guard_bundle.webservice_user_provider:
+    class: '%guard_bundle.webservice_user_provider.class%'
+    arguments:
+      - '@guard_bundle.service.user.repository'
+
+  guard_bundle.token_authenticator:
+    class: '%guard_bundle.token_authenticator.class%'
+    arguments:
+      - '@translator'
+      - '%authenticate_token_name%'
+
+  guard_bundle.password_authenticator:
+    class: '%guard_bundle.password_authenticator.class%'
+    arguments:
+      - '@translator'
+      - '@security.password_encoder'

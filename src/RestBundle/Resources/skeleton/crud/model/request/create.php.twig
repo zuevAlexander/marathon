@@ -1,0 +1,40 @@
+<?php
+
+{% block namespace %}
+namespace {{ bundle.namespace }}\Model\Request\{{ entity.name_with_namespace }};
+{% endblock namespace %}
+
+
+
+{%- block use_statements %}
+
+use RestBundle\Request\AbstractRequest;
+{% endblock use_statements %}
+
+
+
+{%- block phpdoc_class %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}CreateRequest
+{% endblock phpdoc_class_header %}
+
+{%- block phpdoc_methods %}
+ *
+{%- include 'crud/model/request/includes/phpdoc_has_methods/all.php.twig' %}
+{% endblock phpdoc_methods %}
+
+ */
+{% endblock phpdoc_class %}
+
+
+
+{%- block class_definition %}
+class {{ entity.name }}CreateRequest extends AbstractRequest implements {{ entity.name }}AllRequestInterface
+{% endblock class_definition %}
+{
+{% block class_body %}
+    use {{ entity.name }}AllRequestTrait;
+{% endblock class_body %}
+}

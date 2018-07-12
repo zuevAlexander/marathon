@@ -1,0 +1,8 @@
+
+    /**
+     * @inheritdoc
+     */
+    public function processDelete({{ entity.name }}DeleteRequest $request): {{ entity.name }}
+    {
+        return $this->{{ entity.name_lcfirst }}Service->deleteEntity($request->get{{ entity.name }}());
+    }

@@ -1,0 +1,11 @@
+
+    /**
+     * @inheritdoc
+     */
+    public function processGetC({{ entity.name }}ListRequest $request): array
+    {
+        return $this->{{ entity.name_lcfirst }}Service->getEntitiesByWithListRequestAndTotal(
+            [],
+            $request
+        );
+    }

@@ -1,0 +1,56 @@
+<?php
+
+namespace {{ bundle.namespace }}\Model\Handler{{ entity.namespace ? '\\' ~ entity.namespace : '' }};
+
+{% block use_statements %}
+use {{ bundle.namespace }}\Entity\{{ entity.name_with_namespace }};
+{% if 'list' in actions %}
+use {{ request.namespace }}\{{ entity.name }}ListRequest;
+{% endif %}
+{% if 'create' in actions %}
+use {{ request.namespace }}\{{ entity.name }}CreateRequest;
+{% endif %}
+{% if 'read' in actions %}
+use {{ request.namespace }}\{{ entity.name }}ReadRequest;
+{% endif %}
+{% if 'update' in actions %}
+use {{ request.namespace }}\{{ entity.name }}UpdateRequest;
+{% endif %}
+{% if 'delete' in actions %}
+use {{ request.namespace }}\{{ entity.name }}DeleteRequest;
+{% endif %}
+use RestBundle\Handler\ProcessorInterface;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Interface {{ entity.name }}ProcessorInterface
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+interface {{ entity.name }}ProcessorInterface extends ProcessorInterface
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {%- if 'list' in actions %}
+        {%- include 'crud/model/handler/actions/list.php.twig' %}
+    {%- endif %}
+
+    {%- if 'create' in actions %}
+        {%- include 'crud/model/handler/actions/create.php.twig' %}
+    {%- endif %}
+
+    {%- if 'read' in actions %}
+        {%- include 'crud/model/handler/actions/read.php.twig' %}
+    {%- endif %}
+
+    {%- if 'update' in actions %}
+        {%- include 'crud/model/handler/actions/update-put.php.twig' %}
+        {%- include 'crud/model/handler/actions/update-patch.php.twig' %}
+    {%- endif %}
+
+    {%- if 'delete' in actions %}
+        {%- include 'crud/model/handler/actions/delete.php.twig' %}
+    {%- endif %}
+{% endblock class_body %}
+}

@@ -1,0 +1,167 @@
+<?php
+
+namespace {{ bundle.namespace }}\Model\Request\{{ entity.name_with_namespace }};
+{% block use_statements -%}
+{%- for use in uses.request.all %}
+
+use {{ use }};
+{%- endfor %}
+{%- endblock use_statements %}
+
+
+/**
+{% block phpdoc_class_header %}
+ * Trait {{ entity.name }}AllRequestTrait;
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+trait {{ entity.name }}AllRequestTrait
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {% for association in entity.associations -%}
+    {%- if not loop.first %}
+
+
+    {% endif -%}
+    {%- set association_doc_type = association.targetEntityName -%}
+
+    {%- if association.mappedBy is not null -%}
+        {%- set association_doc_type = association_doc_type ~ 'CreateRequest[]' -%}
+    {%- endif -%}
+    /**
+     * @var {{ association_doc_type }}
+     */
+    protected ${{ association.fieldName | lcfirst }};
+    {%- endfor -%}
+
+
+    {%- for field in entity.fields %}
+        {%- set field_type = field.type -%}
+
+        {%- if field.type == 'datetime' -%}
+            {%- set field_type = 'DateTime' -%}
+        {%- endif %}
+
+        {%- if field.type == 'boolean' -%}
+            {%- set field_type = 'bool' -%}
+        {%- endif %}
+
+        {%- if field.type == 'integer' -%}
+            {%- set field_type = 'int' -%}
+        {%- endif %}
+
+        {%- if field.type == 'text' -%}
+            {%- set field_type = 'string' -%}
+        {%- endif %}
+
+
+    /**
+     * @var {{ field_type }}
+     */
+    protected ${{ field.fieldName }};
+    {%- endfor -%}
+
+
+{# Methods #}
+
+    {%- block construct %}
+
+
+    public function __construct()
+    {
+    {#{%- for association in entity.associations %}
+
+        $this->{{ association.fieldName | lcfirst }} = new {{ association.fieldName | ucfirst }}();
+        {%- endfor %}
+
+        {%- for field in entity.fields %}
+            {%- if field.type == 'datetime' %}
+
+        $this->{{ field.fieldName | lcfirst }} = new DateTime();
+            {%- endif %}
+        {%- endfor %}
+
+    #}}
+    {%- endblock construct %}
+
+    {%- for association in entity.associations %}
+        {%- set association_type = association.targetEntityName -%}
+        {%- set association_doc_type = association.targetEntityName -%}
+
+        {%- if association.mappedBy is not null -%}
+            {%- set association_type = 'array' -%}
+        {%- endif %}
+
+        {%- if association_type == 'array' -%}
+            {%- set association_doc_type = association_doc_type ~ 'CreateRequest[]' -%}
+        {%- endif %}
+
+
+    /**
+     * @return {{ association_doc_type }}
+     */
+    public function get{{ association.fieldName | ucfirst }}(): {{ association_type }}
+    {
+        return $this->{{ association.fieldName }};
+    }
+
+    /**
+     * @param {{ association_doc_type }} ${{ association.fieldName }}
+     */
+    public function set{{ association.fieldName | ucfirst }}({{ association_type }} ${{ association.fieldName }})
+    {
+        $this->{{ association.fieldName}} = ${{ association.fieldName}};
+    }
+    {%- endfor -%}
+
+
+    {%- for field in entity.fields %}
+        {%- set field_type = field.type -%}
+
+        {%- if field.type == 'datetime' -%}
+            {%- set field_type = 'DateTime' -%}
+        {%- endif %}
+
+        {%- if field.type == 'boolean' -%}
+            {%- set field_type = 'bool' -%}
+        {%- endif %}
+
+        {%- if field.type == 'integer' -%}
+            {%- set field_type = 'int' -%}
+        {%- endif %}
+
+        {%- if field.type == 'text' -%}
+            {%- set field_type = 'string' -%}
+        {%- endif %}
+
+        {%- set get_prefix = 'get' -%}
+        {%- if field.type == 'boolean' -%}
+            {%- set get_prefix = 'is' -%}
+        {%- endif %}
+
+        {%- set type_hint = ': ' ~ field_type -%}
+        {%- if field.type == 'datetime' -%}
+            {%- set type_hint = '' -%}
+        {%- endif %}
+
+
+    /**
+     * @return {{ field_type }}
+     */
+    public function {{ get_prefix }}{{ field.fieldName | ucfirst }}(){{ type_hint }}
+    {
+        return $this->{{ field.fieldName }};
+    }
+
+    /**
+     * @param {{ field_type }} ${{ field.fieldName }}
+     */
+    public function set{{ field.fieldName | ucfirst }}({{ field_type }} ${{ field.fieldName }})
+    {
+        $this->{{ field.fieldName }} = ${{ field.fieldName }};
+    }
+    {%- endfor %}
+{%- endblock class_body %}
+
+}

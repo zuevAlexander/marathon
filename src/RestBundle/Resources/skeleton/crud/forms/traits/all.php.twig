@@ -1,0 +1,100 @@
+<?php
+
+namespace {{ bundle.namespace }}\Form\{{ entity.name_with_namespace }};
+{% block use_statements -%}
+{%- for use in uses.form.all %}
+
+use {{ use }};
+{%- endfor %}
+{%- endblock use_statements %}
+
+
+/**
+{% block phpdoc_class_header %}
+ * Trait {{ entity.name }}AllTypeTrait;
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+trait {{ entity.name }}AllTypeTrait
+{% endblock class_definition %}
+{
+{% block class_body %}
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            {%- set continue = false -%}
+            {%- for field in entity.fields -%}
+                {%- if entity.identifier == field.fieldName -%}
+                    {%- set continue = true -%}
+                {%- endif -%}
+
+                {%- if not continue -%}
+
+                    {% if field.type == 'string' or field.type == 'text' %}
+
+            ->add('{{ field.fieldName }}', TextType::class, [
+                'by_reference' => false
+            ])
+                    {%- endif -%}
+
+                    {% if field.type == 'integer' %}
+
+            ->add('{{ field.fieldName }}', IntegerType::class, [
+                'by_reference' => false
+            ])
+                    {%- endif -%}
+
+                    {% if field.type == 'float' %}
+
+            ->add('{{ field.fieldName }}', NumberType::class, [
+                'by_reference' => false
+            ])
+                    {%- endif -%}
+
+                    {% if field.type == 'boolean' %}
+
+            ->add('{{ field.fieldName }}', BooleanType::class, [
+                'by_reference' => false
+            ])
+                    {%- endif -%}
+
+                    {% if field.type == 'datetime' %}
+
+            ->add('{{ field.fieldName }}', TimestampType::class)
+                    {%- endif -%}
+                {%- endif -%}
+
+                {%- if continue -%}
+                    {%- set continue = false -%}
+                {%- endif -%}
+            {%- endfor -%}
+
+            {%- for association in entity.associations %}
+                {%- if association.mappedBy is not null %}
+                    {%- set entryType = association.targetEntityName ~ 'CreateType' %}
+
+                    {%- if association.selfFormType.name is defined %}
+                        {%- set entryType = association.selfFormType.name %}
+                    {%- endif %}
+
+            ->add('{{ association.fieldName }}', CollectionType::class, [
+                'by_reference' => false,
+                'entry_type' => {{ entryType }}::class,
+                'allow_add' => true,
+            ])
+                {%- else %}
+
+            ->add('{{ association.fieldName }}', EntityType::class, [
+                'class' => {{ association.targetEntityName }}::class,
+                'by_reference' => false
+            ])
+                {%- endif %}
+            {%- endfor -%}
+            ;
+    }
+{% endblock class_body %}
+}

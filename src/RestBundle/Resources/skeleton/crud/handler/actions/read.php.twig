@@ -1,0 +1,8 @@
+
+    /**
+     * @inheritdoc
+     */
+    public function processGet({{ entity.name }}ReadRequest $request): {{ entity.name }}
+    {
+        return $request->get{{ entity.name }}();
+    }

@@ -1,0 +1,47 @@
+security:
+    encoders:
+        CoreBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
+
+    providers:
+        webservice:
+            id: guard_bundle.webservice_user_provider
+
+    firewalls:
+        dev:
+            pattern: ^/_wdt
+            security: false
+
+        api_doc:
+            pattern: ^/doc
+            security: false
+
+        register:
+            pattern: ^/register
+            security: false
+
+
+        training_rating:
+            pattern: ^/user*
+            methods: [GET]
+            security: false
+
+        login:
+            pattern: ^/login
+            stateless: true
+            guard:
+                authenticators:
+                    - guard_bundle.password_authenticator
+
+        main:
+            pattern: ^/
+            stateless: true
+            guard:
+                authenticators:
+                    - guard_bundle.token_authenticator
+
+    access_control:
+        # require ROLE_ADMIN for /admin*
+        - { path: ^/trainings, roles: ROLE_ADMIN }
+        - { path: ^/users, roles: ROLE_ADMIN, methods: [POST] }

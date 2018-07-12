@@ -1,0 +1,189 @@
+<?php
+
+namespace {{ service.namespace }};
+
+{% block use_statements %}
+use {{ bundle.namespace }}\Entity\{{ entity.name_with_namespace }};
+{% if 'create' in actions or 'update' in actions %}
+use {{ request.namespace }}\{{ entity.name }}AllRequestInterface;
+{% endif %}
+{% if 'create' in actions %}
+use {{ request.namespace }}\{{ entity.name }}CreateRequest;
+{% endif %}
+{% if 'update' in actions %}
+use {{ request.namespace }}\{{ entity.name }}UpdateRequest;
+{% endif %}
+use RestBundle\Service\AbstractService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RestBundle\Entity\EntityInterface;
+{% endblock use_statements %}
+
+{% block no_inspection %}
+/** @noinspection PhpHierarchyChecksInspection */
+{% endblock no_inspection %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}Service
+{% endblock phpdoc_class_header %}
+ *
+{% block phpdoc_methods %}
+ * @method {{ entity.name }} createEntity()
+ * @method {{ entity.name }} getEntity(int $id)
+ * @method {{ entity.name }} getEntityBy(array $criteria)
+ * @method {{ entity.name }} deleteEntity(EntityInterface $entity, bool $flush = true)
+{% endblock phpdoc_methods %}
+ */
+{% block class_definition %}
+class {{ entity.name }}Service extends AbstractService implements EventSubscriberInterface, {{ entity.name }}DefaultValuesInterface
+{% endblock class_definition %}
+{
+{% block class_body %}
+    use {{ entity.name }}DefaultValuesTrait;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    {% block constructor -%}
+    /**
+     * {{ entity.name }}Handler constructor.
+     * @param ContainerInterface $container
+     * @param string $entityClass
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(
+        ContainerInterface $container,
+        string $entityClass,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        parent::__construct($container, $entityClass);
+        $this->setContainer($container);
+        $this->eventDispatcher = $eventDispatcher;
+    }
+{% endblock constructor %}
+
+    {%- block event_subscribers %}
+
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return [];
+    }
+    {%- endblock event_subscribers %}
+
+
+    {%- block update_methods -%}
+    {%- if 'create' in actions %}
+
+
+    /**
+     * @param {{ entity.name }}CreateRequest $request
+     * @return {{ entity.name }}
+     */
+    public function updatePost({{ entity.name }}CreateRequest $request): {{ entity.name }}
+    {
+        ${{ entity.name_lcfirst }} = $this->createEntity();
+        $this->setGeneralFields($request, ${{ entity.name_lcfirst }}, true);
+        $this->saveEntity(${{ entity.name_lcfirst }});
+        return ${{ entity.name_lcfirst }};
+    }
+    {%- endif %}
+
+
+    {%- if 'update' in actions %}
+
+
+    /**
+     * @param {{ entity.name }}UpdateRequest $request
+     * @return {{ entity.name }}
+     */
+    public function updatePut({{ entity.name }}UpdateRequest $request): {{ entity.name }}
+    {
+        ${{ entity.name_lcfirst }} = $request->get{{ entity.name }}();
+        $this->setGeneralFields($request, ${{ entity.name_lcfirst }}, true);
+        $this->saveEntity(${{ entity.name_lcfirst }});
+        return ${{ entity.name_lcfirst }};
+    }
+
+    /**
+     * @param {{ entity.name }}UpdateRequest $request
+     * @return {{ entity.name }}
+     */
+    public function updatePatch({{ entity.name }}UpdateRequest $request): {{ entity.name }}
+    {
+        ${{ entity.name_lcfirst }} = $request->get{{ entity.name }}();
+        $this->setGeneralFields($request, ${{ entity.name_lcfirst }});
+        $this->saveEntity(${{ entity.name_lcfirst }});
+        return ${{ entity.name_lcfirst }};
+    }
+    {%- endif %}
+
+    {%- if 'create' in actions or 'update' in actions %}
+
+
+    /**
+     * @param {{ entity.name }}AllRequestInterface $request
+     * @param {{ entity.name }} ${{ entity.name_lcfirst }}
+     * @param bool $fullUpdate
+     * @return {{ entity.name }}
+     */
+    public function setGeneralFields({{ entity.name }}AllRequestInterface $request, {{ entity.name }} ${{ entity.name_lcfirst }}, $fullUpdate = false)
+    {
+        {% for association in entity.associations %}
+            {%- set setterValue = '$request->get' ~ association.fieldName | ucfirst ~ '()' %}
+            {%- set comment = '' %}
+            {%- set commented = '' %}
+
+            {%- if association.mappedBy is not null %}
+                {%- set setterValue = 'new ArrayCollection()' %}
+                {%- set comment = '//TODO: list of requests - $request->get' ~ association.fieldName | ucfirst ~ '()' %}
+                {%- set commented = '//' %}
+            {%- endif %}
+
+        {%- if not loop.first %}
+
+
+        {% endif %}
+
+        {%- if comment != '' -%}
+        {{ comment }}
+        {% endif -%}
+        {{ commented }}if ($request->has{{ association.fieldName | ucfirst }}()) {
+        {{ commented }}    ${{ entity.name_lcfirst }}->set{{ association.fieldName | ucfirst }}({{ setterValue }});
+        {{ commented }}} elseif ($fullUpdate) {
+        {{ commented }}    ${{ entity.name_lcfirst }}->set{{ association.fieldName | ucfirst }}($this->getDefault{{ association.fieldName | ucfirst }}());
+        {{ commented }}}
+        {%- endfor -%}
+
+
+        {%- for field in entity.fields %}
+        {%- if entity.associations|length > 0 or not loop.first %}
+
+
+        {% endif -%}
+        {%- set get_prefix = 'get' -%}
+        {%- if field.type == 'boolean' -%}
+            {%- set get_prefix = 'is' -%}
+        {%- endif -%}
+
+        if ($request->has{{ field.fieldName | ucfirst }}()) {
+            ${{ entity.name_lcfirst }}->set{{ field.fieldName | ucfirst }}($request->{{ get_prefix }}{{ field.fieldName | ucfirst }}());
+        } elseif ($fullUpdate) {
+            ${{ entity.name_lcfirst }}->set{{ field.fieldName | ucfirst }}($this->{{ get_prefix }}Default{{ field.fieldName | ucfirst }}());
+        }
+        {%- endfor %}
+
+        return ${{ entity.name_lcfirst }};
+    }
+    {%- endif %}
+
+    {%- endblock update_methods %}
+{%- endblock class_body %}
+
+}

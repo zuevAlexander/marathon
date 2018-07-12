@@ -1,0 +1,12 @@
+api_user:
+  resource: '@ApiBundle/Controller/UserController.php'
+  type: rest
+  prefix: /
+  defaults:
+    _format: json
+api_training:
+  resource: '@ApiBundle/Controller/TrainingController.php'
+  type: rest
+  prefix: /
+  defaults:
+    _format: json

@@ -1,0 +1,47 @@
+{
+  "count_repeat": 5,
+  "rules": [
+    {
+      "key": "referenceName",
+      "prefix": "user",
+      "strategy": "prefix_with_number"
+    },
+    {
+      "key": "name",
+      "prefix": "User",
+      "strategy": "prefix_with_number"
+    },
+    {
+      "key": "token",
+      "prefix": "user-token",
+      "strategy": "prefix_with_number"
+    },
+    {
+      "key": "password",
+      "prefix": "User",
+      "strategy": "prefix_with_number"
+    },
+    {
+      "key": "owner",
+      "reference_config_file": "/home/ssp/work/rest-bundle/src/Test/Fixture/UserFixtures.json",
+      "strategy": "reference"
+    },
+    {
+      "key": "members",
+      "count_repeat": 8,
+      "rules": [
+        {
+          "reference_config_file": "/home/ssp/work/rest-bundle/src/Test/Fixture/UserFixtures.json",
+          "strategy": "reference"
+        }
+      ]
+    },
+    {
+      "key": "random_word",
+      "prefix": "status",
+      "words": ["open", "closed"],
+      "count": 3,
+      "strategy": "word"
+    }
+  ]
+}

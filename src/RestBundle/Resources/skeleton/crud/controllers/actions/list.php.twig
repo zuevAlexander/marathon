@@ -1,0 +1,41 @@
+    /**
+{% block phpdoc_method_header %}
+{% endblock phpdoc_method_header %}
+{% block phpdoc_api_doc %}
+     * @ApiDoc(
+     *  resource=true,
+     *  section="{{ entity.name }}",
+     *  description="Get a list of {{ entity.name }}",
+     *  input={
+     *       "class" = "{{ form.namespace }}\{{ entity.name }}ListType",
+     *       "name" = ""
+     *  },
+     *  statusCodes={
+     *      200 = "Ok",
+     *      204 = "Positions not found",
+     *      400 = "Bad format",
+     *      403 = "Forbidden"
+     *  }
+     * )
+{% endblock phpdoc_api_doc %}
+{% block phpdoc_params %}
+     *
+     * @param Request $request
+{% endblock phpdoc_params %}
+{% block phpdoc_return %}
+     *
+     * @return Response
+{% endblock phpdoc_return %}
+{% block phpdoc_throws %}
+{% endblock phpdoc_throws %}
+     */
+{% block method_definition %}
+    public function cgetAction(Request $request) : Response
+{% endblock method_definition %}
+    {
+{% block method_body %}
+{% endblock method_body %}
+{% block method_return %}
+        return $this->process($request, {{ entity.name }}ListType::class);
+{% endblock method_return %}
+    }

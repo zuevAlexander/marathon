@@ -1,0 +1,8 @@
+
+    /**
+     * @inheritdoc
+     */
+    public function processPost({{ entity.name }}CreateRequest $request): {{ entity.name }}
+    {
+        return $this->{{ entity.name_lcfirst }}Service->updatePost($request);
+    }

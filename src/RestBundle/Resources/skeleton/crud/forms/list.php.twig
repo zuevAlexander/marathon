@@ -1,0 +1,22 @@
+<?php
+
+namespace {{ bundle.namespace }}\Form\{{ entity.name_with_namespace }};
+
+{% block use_statements %}
+use {{ request.namespace }}\{{ entity.name }}ListRequest;
+use RestBundle\Form\AbstractFormGetListType;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Class {{ entity.name }}ListType
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity.name }}ListType extends AbstractFormGetListType
+{% endblock class_definition %}
+{
+{% block class_body %}
+    const DATA_CLASS = {{ entity.name }}ListRequest::class;
+{% endblock class_body %}
+}

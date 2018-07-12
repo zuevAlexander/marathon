@@ -1,0 +1,81 @@
+<?php
+
+namespace {{ service.namespace }};
+{% block use_statements -%}
+{%- for use in uses.service.default%}
+
+use {{ use }};
+{%- endfor %}
+{%- endblock use_statements %}
+
+
+/**
+{% block phpdoc_class_header %}
+ * Trait {{ entity.name }}DefaultValuesTrait;
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+trait {{ entity.name }}DefaultValuesTrait
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {% for association in entity.associations %}
+    {%- if not loop.first %}
+
+
+    {% endif -%}
+
+        {%- set association_type = association.targetEntityName -%}
+        {%- set association_doc_type = association.targetEntityName -%}
+
+        {%- if association.mappedBy is not null -%}
+            {%- set association_type = 'array' -%}
+        {%- endif %}
+
+        {%- if association_type == 'array' -%}
+            {%- set association_doc_type = association_doc_type ~ 'CreateRequest[]' -%}
+        {%- endif -%}
+
+
+    /**
+     * @return {{ association_doc_type }}
+     */
+    public function getDefault{{ association.fieldName | ucfirst }}(): {{ association_type }}
+    {
+        //TODO some default value
+    }
+    {%- endfor -%}
+
+
+    {%- for field in entity.fields %}
+        {%- set field_type = field.type -%}
+
+        {%- if field.type == 'datetime' -%}
+            {%- set field_type = 'DateTime' -%}
+        {%- endif %}
+
+        {%- if field.type == 'boolean' -%}
+            {%- set field_type = 'bool' -%}
+        {%- endif %}
+
+        {%- if field.type == 'integer' -%}
+            {%- set field_type = 'int' -%}
+        {%- endif %}
+
+        {%- set get_prefix = 'get' -%}
+        {%- if field.type == 'boolean' -%}
+            {%- set get_prefix = 'is' -%}
+        {%- endif %}
+
+
+    /**
+     * @return {{ field_type }}
+     */
+    public function {{ get_prefix }}Default{{ field.fieldName | ucfirst }}(): {{ field_type }}
+    {
+        //TODO some default value
+    }
+    {%- endfor %}
+{%- endblock class_body %}
+
+}

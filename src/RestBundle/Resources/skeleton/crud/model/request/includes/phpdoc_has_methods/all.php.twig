@@ -1,0 +1,10 @@
+{%- block phpdoc_all_methods %}
+{%- for association in entity.associations %}
+
+ * @method bool has{{ association.fieldName | ucfirst }}()
+{%- endfor %}
+{%- for field in entity.fields %}
+
+ * @method bool has{{ field.fieldName | ucfirst }}()
+{%- endfor %}
+{%- endblock phpdoc_all_methods -%}

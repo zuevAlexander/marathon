@@ -1,0 +1,35 @@
+<?php
+
+namespace {{ bundle.namespace }}\Form\{{ entity.name_with_namespace }};
+
+{% block use_statements %}
+use {{ bundle.namespace }}\Entity\{{ entity.name_with_namespace }};
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\FormEvent;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Trait {{ entity.name }}SingleTypeTrait;
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+trait {{ entity.name }}SingleTypeTrait
+{% endblock class_definition %}
+{
+{% block class_body %}
+    /**
+     * @param FormEvent $event
+     */
+    public function preSubmit(FormEvent $event)
+    {
+        $event
+            ->getForm()
+            ->add('{{ entity.singularized }}', EntityType::class, [
+                'class' => {{ entity.name }}::class,
+                'required' => true,
+                'invalid_message' => '{{ entity.name }} identifier is required and should be integer',
+            ]);
+    }
+{% endblock class_body %}
+}

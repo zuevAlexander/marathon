@@ -1,0 +1,37 @@
+<?php
+
+namespace {{ bundle.namespace }}\Model\Request\{{ entity.name_with_namespace }};
+
+{% block use_statements -%}
+use {{ entity.class }};
+{%- endblock use_statements %}
+
+
+/**
+{% block phpdoc_class_header %}
+ * Interface {{ entity.name }}SingleRequestInterface
+{% endblock phpdoc_class_header %}
+
+{%- block phpdoc_methods %}
+ *
+{%- include 'crud/model/request/includes/phpdoc_has_methods/single.php.twig' %}
+{% endblock phpdoc_methods %}
+
+ */
+{% block class_definition %}
+interface {{ entity.name }}SingleRequestInterface
+{% endblock class_definition %}
+{
+{% block class_body %}
+    /**
+     * @return {{ entity.name }}
+     */
+    public function get{{ entity.name }}(): {{ entity.name }};
+
+    /**
+     * @param {{ entity.name }} ${{ entity.name_lcfirst }}
+     */
+    public function set{{ entity.name }}({{ entity.name }} ${{ entity.name_lcfirst }});
+{%- endblock class_body %}
+
+}
