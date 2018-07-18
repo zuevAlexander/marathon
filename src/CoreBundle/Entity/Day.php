@@ -18,6 +18,8 @@ class Day implements  EntityInterface
 {
     use EntityTrait;
 
+    const FIRST_DAY = 1531342800;
+
     /**
      * @var int
      *
@@ -53,7 +55,7 @@ class Day implements  EntityInterface
      *
      * @JMS\Groups({"get_user"})
      *
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\OneToMany(targetEntity="Training", mappedBy="day", cascade={"persist", "remove"})
      */
     private $trainings;
@@ -73,12 +75,19 @@ class Day implements  EntityInterface
     private $times;
 
     /**
+     * @var boolean
+     *
+     * @JMS\Type("boolean")
+     */
+    private $isCurrent;
+
+    /**
      * Day constructor.
      */
     public function __construct()
     {
         $this->trainings = new ArrayCollection();
-        $this->prepareData();
+//        $this->prepareData();
     }
 
     /**
@@ -174,6 +183,8 @@ class Day implements  EntityInterface
         foreach ($trainings as $training) {
             $this->pushUps += $training->getAmount();
         }
+
+        $this->isCurrent = ceil((time() - self::FIRST_DAY) / 24 / 60 / 60) == $this->getDayNumber();
 
         return $this;
     }

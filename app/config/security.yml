@@ -18,17 +18,17 @@ security:
             security: false
 
         register:
-            pattern: ^/register
+            pattern: ^/api/register
             security: false
 
 
         training_rating:
-            pattern: ^/user*
+            pattern: ^/api/user*
             methods: [GET]
             security: false
 
         login:
-            pattern: ^/login
+            pattern: ^/api/login
             stateless: true
             guard:
                 authenticators:
@@ -43,5 +43,5 @@ security:
 
     access_control:
         # require ROLE_ADMIN for /admin*
-        - { path: ^/trainings, roles: ROLE_ADMIN }
-        - { path: ^/users, roles: ROLE_ADMIN, methods: [POST] }
+        - { path: ^/api/trainings, roles: ROLE_ADMIN }
+        - { path: ^/api/users, roles: ROLE_ADMIN, methods: [POST] }

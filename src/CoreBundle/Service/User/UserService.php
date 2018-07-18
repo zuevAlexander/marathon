@@ -88,14 +88,18 @@ class UserService extends AbstractService
             $request
         );
 
+        $participants = [];
         /** @var User $user */
         foreach ($users['items'] as $user) {
-            foreach ($user->getDays() as $day) {
-                $day->prepareData();
+            if (in_array('ROLE_USER', $user->getRoles())) {
+                foreach ($user->getDays() as $day) {
+                    $day->prepareData();
+                }
+                $participants[] = $user;
             }
         }
 
-        return $users;
+        return $participants;
     }
 
     /**
