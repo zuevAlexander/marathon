@@ -95,7 +95,7 @@ class User implements  UserInterface, NDUserInterface
      * @var ArrayCollection|Day[]
      *
      * @JMS\Type("array<CoreBundle\Entity\Day>")
-     * @JMS\Groups({"get_user", "get_users"})
+     * @JMS\Groups({"get_user", "get_users", "post_user"})
      *
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\OneToMany(targetEntity="Day", mappedBy="user", cascade={"persist", "remove"})

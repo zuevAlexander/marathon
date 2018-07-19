@@ -7,7 +7,9 @@ use CoreBundle\Entity\User;
 use CoreBundle\Model\Request\User\UserListRequest;
 use CoreBundle\Model\Request\User\UserReadRequest;
 use CoreBundle\Model\Request\User\UserRegisterRequest;
+use CoreBundle\Model\Request\User\UserUpdateRequest;
 use CoreBundle\Service\Day\DayService;
+use Doctrine\Common\Collections\ArrayCollection;
 use RestBundle\Service\AbstractService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use RestBundle\Entity\EntityInterface;
@@ -139,5 +141,35 @@ class UserService extends AbstractService
             $day->setUser($user);
             $this->dayService->saveEntity($day);
         }
+
+        $days = $this->dayService->getEntitiesBy(["user" => $user]);
+
+        /** @var Day $day */
+        foreach ($days as $day) {
+            $day->prepareData();
+        }
+
+        $user->setDays($days);
+    }
+
+    /**
+     * @param UserUpdateRequest $request
+     * @return User
+     */
+    public function updatePatch(UserUpdateRequest $request): User
+    {
+        $user = $request->getUser();
+
+        if ($request->getUsername()) {
+            $user->setUsername($request->getUsername());
+        }
+
+        if ($request->getEmail()) {
+            $user->setEmail($request->getEmail());
+        }
+
+        $this->saveEntity($user);
+
+        return $user;
     }
 }

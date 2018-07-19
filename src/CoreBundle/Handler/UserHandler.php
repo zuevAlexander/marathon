@@ -8,6 +8,8 @@ use CoreBundle\Model\Request\User\UserLoginRequest;
 use CoreBundle\Model\Request\User\UserRegisterRequest;
 use CoreBundle\Model\Request\User\UserReadRequest;
 use CoreBundle\Model\Handler\UserProcessorInterface;
+use CoreBundle\Model\Request\User\UserUpdateRequest;
+use CoreBundle\Model\Request\User\UserDeleteRequest;
 use CoreBundle\Service\User\UserService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
@@ -82,5 +84,23 @@ class UserHandler implements UserProcessorInterface
     public function processGetC(UserListRequest $request): array
     {
         return $this->userService->getCUsers($request);
+    }
+
+    /**
+     * @param UserUpdateRequest $request
+     * @return User
+     */
+    public function processPatch(UserUpdateRequest $request): User
+    {
+        return $this->userService->updatePatch($request);
+    }
+
+    /**
+     * @param UserDeleteRequest $request
+     * @return User
+     */
+    public function processDelete(UserDeleteRequest $request): User
+    {
+        return $this->userService->deleteEntity($request->getUser());
     }
 }

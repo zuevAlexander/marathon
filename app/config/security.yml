@@ -44,4 +44,4 @@ security:
     access_control:
         # require ROLE_ADMIN for /admin*
         - { path: ^/api/trainings, roles: ROLE_ADMIN }
-        - { path: ^/api/users, roles: ROLE_ADMIN, methods: [POST] }
+        - { path: ^/api/users, roles: ROLE_ADMIN}

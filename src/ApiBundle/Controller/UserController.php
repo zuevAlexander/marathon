@@ -2,6 +2,9 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Entity\User;
+use CoreBundle\Form\User\UserUpdateType;
+use CoreBundle\Form\User\UserDeleteType;
 use CoreBundle\Form\User\UserListType;
 use CoreBundle\Form\User\UserLoginType;
 use CoreBundle\Form\User\UserRegisterType;
@@ -155,6 +158,55 @@ class UserController extends BaseController
         return $this->process($request, UserListType::class);
     }
 
+    /**
+     * @ApiDoc (
+     *   resource = true,
+     *   section = "User",
+     *   description = "Update certain fields User",
+     *   input = {
+     *      "class" = "CoreBundle\Form\User\UserUpdateType",
+     *      "name" = "",
+     *   },
+     *   statusCodes = {
+     *      "200" = "Ok",
+     *      "204" = "User not found",
+     *      "400" = "Bad format",
+     *      "403" = "Forbidden",
+     *   },
+     * )
+     * @param Request $request
+     * @param User $user
+     * @return Response
+     */
+    public function patchAction(Request $request, User $user): Response
+    {
+        return $this->process($request, UserUpdateType::class);
+    }
+
+    /**
+     * @ApiDoc (
+     *   resource = true,
+     *   section = "User",
+     *   description = "Delete User",
+     *   input = {
+     *      "class" = "CoreBundle\Form\User\UserDeleteType",
+     *      "name" = "",
+     *   },
+     *   statusCodes = {
+     *      "200" = "Ok",
+     *      "204" = "User not found",
+     *      "400" = "Bad format",
+     *      "403" = "Forbidden",
+     *   },
+     * )
+     * @param Request $request
+     * @param User $user
+     * @return Response
+     */
+    public function deleteAction(Request $request, User $user): Response
+    {
+        return $this->process($request, UserDeleteType::class);
+    }
 
     /**
      * @return ProcessorInterface
