@@ -2,7 +2,10 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Entity\Training;
 use CoreBundle\Form\Training\TrainingCreateType;
+use CoreBundle\Form\Training\TrainingUpdateType;
+use CoreBundle\Form\Training\TrainingDeleteType;
 use RestBundle\Controller\BaseController;
 use RestBundle\Handler\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +45,57 @@ class TrainingController extends BaseController
     public function postAction(Request $request) : Response
     {
         return $this->process($request, TrainingCreateType::class, Response::HTTP_CREATED);
+    }
+
+
+    /**
+     * @ApiDoc (
+     *   resource = true,
+     *   section = "Training",
+     *   description = "Update certain fields Training",
+     *   input = {
+     *      "class" = "CoreBundle\Form\Training\TrainingUpdateType",
+     *      "name" = "",
+     *   },
+     *   statusCodes = {
+     *      "200" = "Ok",
+     *      "204" = "Training not found",
+     *      "400" = "Bad format",
+     *      "403" = "Forbidden",
+     *   },
+     * )
+     * @param Request $request
+     * @param Training $training
+     * @return Response
+     */
+    public function patchAction(Request $request, Training $training): Response
+    {
+        return $this->process($request, TrainingUpdateType::class);
+    }
+
+    /**
+     * @ApiDoc (
+     *   resource = true,
+     *   section = "Training",
+     *   description = "Delete Training",
+     *   input = {
+     *      "class" = "CoreBundle\Form\Training\TrainingDeleteType",
+     *      "name" = "",
+     *   },
+     *   statusCodes = {
+     *      "200" = "Ok",
+     *      "204" = "Training not found",
+     *      "400" = "Bad format",
+     *      "403" = "Forbidden",
+     *   },
+     * )
+     * @param Request $request
+     * @param Training $training
+     * @return Response
+     */
+    public function deleteAction(Request $request, Training $training): Response
+    {
+        return $this->process($request, TrainingDeleteType::class);
     }
 
     /**

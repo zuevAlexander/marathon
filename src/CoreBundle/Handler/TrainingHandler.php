@@ -4,6 +4,8 @@ namespace CoreBundle\Handler;
 
 use CoreBundle\Entity\Training;
 use CoreBundle\Model\Request\Training\TrainingCreateRequest;
+use CoreBundle\Model\Request\Training\TrainingDeleteRequest;
+use CoreBundle\Model\Request\Training\TrainingUpdateRequest;
 use CoreBundle\Service\Training\TrainingService;
 use CoreBundle\Model\Handler\TrainingProcessorInterface;
 
@@ -33,5 +35,23 @@ class TrainingHandler implements TrainingProcessorInterface
     public function processPost(TrainingCreateRequest $request) : Training
     {
         return $this->trainingService->createTraining($request);
+    }
+
+    /**
+     * @param TrainingUpdateRequest $request
+     * @return Training
+     */
+    public function processPatch(TrainingUpdateRequest $request): Training
+    {
+        return $this->trainingService->updatePatch($request);
+    }
+
+    /**
+     * @param TrainingDeleteRequest $request
+     * @return Training
+     */
+    public function processDelete(TrainingDeleteRequest $request): Training
+    {
+        return $this->trainingService->deleteEntity($request->getTraining());
     }
 }

@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity()
  */
-class Training implements  EntityInterface
+class Training implements EntityInterface
 {
     use EntityTrait;
 
@@ -24,7 +24,7 @@ class Training implements  EntityInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Exclude()
+     * @JMS\Expose
      * @JMS\SerializedName("id")
      * @JMS\Type("integer")
      */
