@@ -1,0 +1,15 @@
+parameters:
+  core.handler.voter.class: CoreBundle\Handler\VoterHandler
+  core.entity.voter.class: CoreBundle\Entity\Voter
+  core.service.voter.class: CoreBundle\Service\Voter\VoterService
+services:
+  core.handler.voter:
+    class: '%core.handler.voter.class%'
+    arguments:
+      - '@core.service.voter'
+      - '@security.token_storage'
+  core.service.voter:
+    class: '%core.service.voter.class%'
+    arguments:
+      - '@service_container'
+      - '%core.entity.voter.class%'

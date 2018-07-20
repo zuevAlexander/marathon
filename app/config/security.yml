@@ -27,6 +27,10 @@ security:
             methods: [GET]
             security: false
 
+        voting:
+            pattern: ^/api/voting*
+            security: false
+
         login:
             pattern: ^/api/login
             stateless: true
