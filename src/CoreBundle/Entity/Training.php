@@ -35,7 +35,7 @@ class Training implements EntityInterface
      *
      * @JMS\Type("CoreBundle\Entity\Day")
      *
-     * @ORM\ManyToOne(targetEntity="Day", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Day", cascade={"persist"})
      * @ORM\JoinColumn(name="day_id", referencedColumnName="id", nullable=false)
      */
     private $day;
