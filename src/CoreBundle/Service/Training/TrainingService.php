@@ -78,6 +78,8 @@ class TrainingService extends AbstractService
             $this->saveEntity($training);
         }
 
+        $training->getDay()->prepareData();
+
         return $training;
     }
 }
