@@ -2,6 +2,7 @@
 namespace CoreBundle\Service\Training;
 
 use CoreBundle\Entity\Training;
+use CoreBundle\Entity\Day;
 use CoreBundle\Model\Request\Training\TrainingCreateRequest;
 use CoreBundle\Model\Request\Training\TrainingUpdateRequest;
 use CoreBundle\Service\Day\DayService;
@@ -18,6 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TrainingService extends AbstractService
 {
+    const MARATHONE_FINISH = 1000;
+
     /**
      * @var UserService
      */
@@ -61,6 +64,29 @@ class TrainingService extends AbstractService
         $training->setDate(new \DateTime());
         $training->setAmount($request->getAmount());
         $this->saveEntity($training);
+
+        /** @var Day[] $days */
+        $days = $this->dayService->getEntitiesBy(
+            [
+                'user' => $request->getUser()
+            ]
+        );
+
+        $pushUps = 0;
+
+        foreach ($days as $day) {
+            $trainings = $day->getTrainings();
+            foreach ($trainings as $training) {
+                $pushUps += $training->getAmount();
+            }
+        }
+
+        if ($pushUps >= self::MARATHONE_FINISH) {
+            $user = $request->getUser();
+            $currentDate = new \DateTime();
+            $user->setFinishDate($currentDate->getTimestamp());
+            $this->userService->saveEntity($user);
+        }
 
         return $training;
     }

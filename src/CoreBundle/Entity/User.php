@@ -89,7 +89,7 @@ class User implements  UserInterface, NDUserInterface
      *
      * @ORM\Column(name="roles", type="array")
      */
-    protected $roles;
+    private $roles;
 
     /**
      * @var ArrayCollection|Day[]
@@ -101,6 +101,15 @@ class User implements  UserInterface, NDUserInterface
      * @ORM\OneToMany(targetEntity="Day", mappedBy="user", cascade={"persist", "remove"})
      */
     private $days;
+
+    /**
+     * @var int
+     *
+     * @JMS\Type("int")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $finishDate;
 
     /**
      * User constructor.
@@ -229,6 +238,22 @@ class User implements  UserInterface, NDUserInterface
     {
         $this->roles = $roles;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFinishDate(): int
+    {
+        return $this->finishDate;
+    }
+
+    /**
+     * @param int $finishDate
+     */
+    public function setFinishDate(int $finishDate)
+    {
+        $this->finishDate = $finishDate;
     }
 
     public function getSalt()

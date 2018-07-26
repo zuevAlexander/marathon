@@ -3,3 +3,4 @@ imports:
   - resource: TrainingServices.yml
   - resource: DayServices.yml
   - resource: VoterServices.yml
+  - resource: CurrentUserServices.yml

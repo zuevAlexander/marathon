@@ -2,10 +2,12 @@
 
 namespace CoreBundle\Form\Training;
 
+use CoreBundle\Entity\User;
 use CoreBundle\Model\Request\Training\TrainingCreateRequest;
 use RestBundle\Form\AbstractFormType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class TrainingCreateType extends AbstractFormType
 {
@@ -24,8 +26,10 @@ class TrainingCreateType extends AbstractFormType
             ->add('day', IntegerType::class, [
                 'required' => true,
             ])
-            ->add('user', IntegerType::class, [
-                'required' => true,
-            ]);
+            ->add('user', EntityType::class,
+                [
+                    'class' => User::class,
+                ]
+            );
     }
 }

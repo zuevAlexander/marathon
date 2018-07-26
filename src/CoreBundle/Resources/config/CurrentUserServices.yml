@@ -1,0 +1,12 @@
+parameters:
+  core.handler.current_user.class: CoreBundle\Handler\CurrentUserHandler
+  core.service.current_user.class: CoreBundle\Service\CurrentUser\CurrentUserService
+services:
+  core.handler.current_user:
+    class: '%core.handler.current_user.class%'
+    arguments:
+      - '@core.service.current_user'
+  core.service.current_user:
+    class: '%core.service.current_user.class%'
+    arguments:
+      - '@security.token_storage'
