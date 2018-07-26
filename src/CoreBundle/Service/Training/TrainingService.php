@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TrainingService extends AbstractService
 {
-    const MARATHONE_FINISH = 1000;
+    const MARATHONE_FINISH = 3000;
 
     /**
      * @var UserService
