@@ -23,4 +23,24 @@ class DayService extends AbstractService
         $this->setContainer($container);
     }
 
+    /**
+     * @param Day $day
+     * @return Day
+     */
+    public function prepareData(Day $day): Day
+    {
+        $trainings = $day->getTrainings();
+        $day->setTimes($trainings->count());
+
+        $pushUps = 0;
+        foreach ($trainings as $training) {
+            $pushUps += $training->getAmount();
+        }
+
+        $day->setPushUps($pushUps);
+
+        $day->setIsCurrent(ceil((time() - $day->getParticipant()->getChallenge()->getStartDate()->getTimestamp()) / 24 / 60 / 60) == $day->getDayNumber());
+
+        return $day;
+    }
 }

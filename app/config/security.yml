@@ -21,14 +21,18 @@ security:
             pattern: ^/api/register
             security: false
 
+        voting:
+            pattern: ^/api/voting*
+            security: false
 
-        training_rating:
-            pattern: ^/api/user*
+        challenge:
+            pattern: ^/api/challenge*
             methods: [GET]
             security: false
 
-        voting:
-            pattern: ^/api/voting*
+        participant:
+            pattern: ^/api/participant*
+            methods: [GET]
             security: false
 
         login:
@@ -47,5 +51,4 @@ security:
 
     access_control:
         # require ROLE_ADMIN for /admin*
-        - { path: ^/api/trainings, roles: ROLE_ADMIN }
-        - { path: ^/api/users, roles: ROLE_ADMIN}
+        - { path: ^/api/(trainings|challenge|participant|user), roles: ROLE_ADMIN }

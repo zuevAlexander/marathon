@@ -21,15 +21,11 @@ class AppKernel extends Kernel
             new CoreBundle\CoreBundle(),
 
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
-
-//            new NorseDigital\Symfony\RestBundle\RestBundle(),
             new RestBundle\RestBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
-
-//            new NorseDigital\UserBundle\UserBundle(),
         ];
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

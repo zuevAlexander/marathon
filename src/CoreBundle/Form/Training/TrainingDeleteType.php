@@ -11,6 +11,7 @@ use RestBundle\Form\AbstractFormType;
 
 /**
  * Class TrainingDeleteType
+ * @package CoreBundle\Form\Training
  */
 class TrainingDeleteType extends AbstractFormType
 {

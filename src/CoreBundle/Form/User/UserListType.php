@@ -7,6 +7,7 @@ use RestBundle\Form\AbstractFormGetListType;
 
 /**
  * Class UserListType
+ * @package CoreBundle\Form\User
  */
 class UserListType extends AbstractFormGetListType
 {

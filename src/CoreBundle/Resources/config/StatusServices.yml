@@ -1,0 +1,9 @@
+parameters:
+  core.entity.status.class: CoreBundle\Entity\Status
+  core.service.status.class: CoreBundle\Service\Status\StatusService
+services:
+  core.service.status:
+    class: '%core.service.status.class%'
+    arguments:
+      - '@service_container'
+      - '%core.entity.status.class%'

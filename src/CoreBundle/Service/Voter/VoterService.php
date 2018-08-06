@@ -3,7 +3,7 @@ namespace CoreBundle\Service\Voter;
 
 use CoreBundle\Entity\Vote;
 use CoreBundle\Entity\Voter;
-use CoreBundle\Exception\User\VoterAlreadyExistsException;
+use CoreBundle\Exception\Voter\VoterAlreadyExistsException;
 use Doctrine\Common\Collections\ArrayCollection;
 use RestBundle\Service\AbstractService;
 use Symfony\Component\DependencyInjection\ContainerInterface;

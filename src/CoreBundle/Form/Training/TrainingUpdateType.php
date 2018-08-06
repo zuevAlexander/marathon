@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 /**
  * Class TrainingUpdateType
+ * @package CoreBundle\Form\Training
  */
 class TrainingUpdateType extends AbstractFormType
 {

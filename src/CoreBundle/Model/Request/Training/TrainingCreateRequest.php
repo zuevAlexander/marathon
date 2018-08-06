@@ -3,7 +3,7 @@
 namespace CoreBundle\Model\Request\Training;
 
 use CoreBundle\Entity\Day;
-use CoreBundle\Entity\User;
+use CoreBundle\Entity\Participant;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -27,11 +27,11 @@ class TrainingCreateRequest
     private $day;
 
     /**
-     * @var User
+     * @var Participant
      *
      * @Assert\NotBlank()
      */
-    private $user;
+    private $participant;
 
     /**
      * TrainingCreateRequest constructor.
@@ -39,7 +39,7 @@ class TrainingCreateRequest
     public function __construct()
     {
         $this->days = new Day();
-        $this->user = new User();
+        $this->participant = new Participant();
     }
 
     /**
@@ -75,19 +75,19 @@ class TrainingCreateRequest
     }
 
     /**
-     * @return User
+     * @return Participant
      */
-    public function getUser()
+    public function getParticipant()
     {
-        return $this->user;
+        return $this->participant;
     }
 
     /**
-     * @param User $user
+     * @param Participant $participant
      */
-    public function setUser(User $user)
+    public function setParticipant(Participant $participant)
     {
-        $this->user = $user;
+        $this->participant = $participant;
     }
 
 }

@@ -13,6 +13,7 @@ use RestBundle\Form\TextType;
 
 /**
  * Class UserUpdateType
+ * @package CoreBundle\Form\User
  */
 class UserUpdateType extends AbstractFormType
 {

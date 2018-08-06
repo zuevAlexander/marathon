@@ -14,4 +14,3 @@ services:
       - '@service_container'
       - '%core.entity.user.class%'
       - "@security.password_encoder"
-      - '@core.service.day'

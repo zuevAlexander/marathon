@@ -7,6 +7,10 @@ use RestBundle\Form\AbstractFormType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Class UserReadType
+ * @package CoreBundle\Form\User
+ */
 class UserReadType extends AbstractFormType
 {
     const DATA_CLASS = UserReadRequest::class;

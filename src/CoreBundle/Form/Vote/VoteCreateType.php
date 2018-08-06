@@ -9,6 +9,10 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use CoreBundle\Model\Request\Vote\VoteCreateRequest;
 
+/**
+ * Class VoteCreateType
+ * @package CoreBundle\Form\Vote
+ */
 class VoteCreateType extends AbstractFormType
 {
     const DATA_CLASS = VoteCreateRequest::class;

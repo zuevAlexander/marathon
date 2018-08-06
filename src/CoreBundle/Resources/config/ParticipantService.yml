@@ -1,0 +1,15 @@
+parameters:
+  core.handler.participant.class: CoreBundle\Handler\ParticipantHandler
+  core.entity.participant.class: CoreBundle\Entity\Participant
+  core.service.participant.class: CoreBundle\Service\Participant\ParticipantService
+services:
+  core.handler.participant:
+    class: '%core.handler.participant.class%'
+    arguments:
+      - '@core.service.participant'
+  core.service.participant:
+    class: '%core.service.participant.class%'
+    arguments:
+      - '@service_container'
+      - '%core.entity.participant.class%'
+      - '@core.service.day'

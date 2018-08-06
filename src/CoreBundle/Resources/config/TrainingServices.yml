@@ -12,5 +12,5 @@ services:
     arguments:
       - '@service_container'
       - '%core.entity.training.class%'
-      - '@core.service.user'
+      - '@core.service.participant'
       - '@core.service.day'

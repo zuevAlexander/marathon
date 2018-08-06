@@ -8,7 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class UserLoginType.
+ * Class UserLoginType
+ * @package CoreBundle\Form\User
  */
 class UserLoginType extends AbstractFormType
 {

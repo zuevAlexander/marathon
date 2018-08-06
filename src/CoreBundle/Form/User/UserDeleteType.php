@@ -11,6 +11,7 @@ use RestBundle\Form\AbstractFormType;
 
 /**
  * Class UserDeleteType
+ * @package CoreBundle\Form\User
  */
 class UserDeleteType extends AbstractFormType
 {

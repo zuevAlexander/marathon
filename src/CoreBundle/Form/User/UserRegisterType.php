@@ -9,6 +9,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * Class UserRegisterType
+ * @package CoreBundle\Form\User
+ */
 class UserRegisterType extends AbstractFormType
 {
     const DATA_CLASS = UserRegisterRequest::class;

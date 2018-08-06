@@ -22,3 +22,15 @@ api_current_user:
   prefix: /api
   defaults:
     _format: json
+api_challenge:
+  resource: '@ApiBundle/Controller/ChallengeController.php'
+  type: rest
+  prefix: /api
+  defaults:
+    _format: json
+api_participant:
+  resource: '@ApiBundle/Controller/ParticipantController.php'
+  type: rest
+  prefix: /api
+  defaults:
+    _format: json

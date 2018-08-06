@@ -1,0 +1,17 @@
+parameters:
+  core.handler.challenge.class: CoreBundle\Handler\ChallengeHandler
+  core.entity.challenge.class: CoreBundle\Entity\Challenge
+  core.service.challenge.class: CoreBundle\Service\Challenge\ChallengeService
+services:
+  core.handler.challenge:
+    class: '%core.handler.challenge.class%'
+    arguments:
+      - '@core.service.challenge'
+  core.service.challenge:
+    class: '%core.service.challenge.class%'
+    arguments:
+      - '@service_container'
+      - '%core.entity.challenge.class%'
+      - '@core.service.status'
+      - '@core.service.participant'
+      - '@core.service.day'

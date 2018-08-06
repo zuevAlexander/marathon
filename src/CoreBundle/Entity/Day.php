@@ -18,8 +18,6 @@ class Day implements  EntityInterface
 {
     use EntityTrait;
 
-    const FIRST_DAY = 1531342800;
-
     /**
      * @var int
      *
@@ -34,14 +32,15 @@ class Day implements  EntityInterface
     private $id;
 
     /**
-     * @var User
+     * @var Participant
      *
-     * @JMS\Type("CoreBundle\Entity\User")
+     * @JMS\Exclude()
+     * @JMS\Type("CoreBundle\Entity\Participant")
      *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Participant", cascade={"persist"})
+     * @ORM\JoinColumn(name="participant_id", referencedColumnName="id", nullable=false)
      */
-    private $user;
+    private $participant;
 
     /**
      * @var int
@@ -53,7 +52,8 @@ class Day implements  EntityInterface
     /**
      * @var ArrayCollection|Training[]
      *
-     * @JMS\Groups({"get_user"})
+//     * @JMS\Groups({"get_user"})
+     * @JMS\Exclude()
      *
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\OneToMany(targetEntity="Training", mappedBy="day", cascade={"persist", "remove"})
@@ -87,7 +87,6 @@ class Day implements  EntityInterface
     public function __construct()
     {
         $this->trainings = new ArrayCollection();
-//        $this->prepareData();
     }
 
     /**
@@ -118,20 +117,20 @@ class Day implements  EntityInterface
     }
 
     /**
-     * @return User
+     * @return Participant
      */
-    public function getUser(): User
+    public function getParticipant(): Participant
     {
-        return $this->user;
+        return $this->participant;
     }
 
     /**
-     * @param User $user
+     * @param Participant $participant
      * @return Day
      */
-    public function setUser(User $user): self
+    public function setParticipant(Participant $participant): self
     {
-        $this->user = $user;
+        $this->participant = $participant;
 
         return $this;
     }
@@ -164,6 +163,17 @@ class Day implements  EntityInterface
     }
 
     /**
+     * @param int $pushUps
+     * @return Day
+     */
+    public function setPushUps(int $pushUps): self
+    {
+        $this->pushUps = $pushUps;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getTimes(): int
@@ -172,20 +182,50 @@ class Day implements  EntityInterface
     }
 
     /**
+     * @param int $times
      * @return Day
      */
-    public function prepareData(): self
+    public function setTimes(int $times): self
     {
-        $trainings = $this->trainings;
-        $this->times = $trainings->count();
-        $this->pushUps = 0;
-
-        foreach ($trainings as $training) {
-            $this->pushUps += $training->getAmount();
-        }
-
-        $this->isCurrent = ceil((time() - self::FIRST_DAY) / 24 / 60 / 60) == $this->getDayNumber();
+        $this->times = $times;
 
         return $this;
     }
+
+    /**
+     * @return boolean
+     */
+    public function getIsCurrent(): bool
+    {
+        return $this->isCurrent;
+    }
+
+    /**
+     * @param bool $isCurrent
+     * @return Day
+     */
+    public function setIsCurrent(bool $isCurrent): self
+    {
+        $this->isCurrent = $isCurrent;
+
+        return $this;
+    }
+
+//    /**
+//     * @return Day
+//     */
+//    public function prepareData(): self
+//    {
+//        $trainings = $this->trainings;
+//        $this->times = $trainings->count();
+//        $this->pushUps = 0;
+//
+//        foreach ($trainings as $training) {
+//            $this->pushUps += $training->getAmount();
+//        }
+//
+//        $this->isCurrent = ceil((time() - self::FIRST_DAY) / 24 / 60 / 60) == $this->getDayNumber();
+//
+//        return $this;
+//    }
 }

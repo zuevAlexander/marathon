@@ -10,6 +10,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
+/**
+ * Class VoterCreateType
+ * @package CoreBundle\Form\Voter
+ */
 class VoterCreateType extends AbstractFormType
 {
     const DATA_CLASS = VoterCreateRequest::class;

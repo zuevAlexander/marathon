@@ -34,23 +34,16 @@ class UserService extends AbstractService
     private $encoder;
 
     /**
-     * @var DayService
-     */
-    private $dayService;
-
-    /**
      * UserService constructor.
      * @param ContainerInterface $container
      * @param string $entityClass
      * @param UserPasswordEncoderInterface $encoder
-     * @param DayService $dayService
      */
-    public function __construct(ContainerInterface $container, string $entityClass, UserPasswordEncoderInterface $encoder, DayService $dayService
-    ) {
+    public function __construct(ContainerInterface $container, string $entityClass, UserPasswordEncoderInterface $encoder)
+    {
         parent::__construct($container, $entityClass);
         $this->setContainer($container);
         $this->encoder = $encoder;
-        $this->dayService = $dayService;
     }
 
     /**
@@ -74,8 +67,6 @@ class UserService extends AbstractService
         $user->setRoles(array($role));
         $this->generateApiKey($user);
 
-        $this->fillDays($user);
-
         return $user;
     }
 
@@ -90,18 +81,7 @@ class UserService extends AbstractService
             $request
         );
 
-        $participants = [];
-        /** @var User $user */
-        foreach ($users['items'] as $user) {
-            if (in_array('ROLE_USER', $user->getRoles())) {
-                foreach ($user->getDays() as $day) {
-                    $day->prepareData();
-                }
-                $participants[] = $user;
-            }
-        }
-
-        return $participants;
+        return $users['items'];
     }
 
     /**
@@ -111,9 +91,6 @@ class UserService extends AbstractService
     public function getUser(UserReadRequest $request): User
     {
         $user = $this->getEntity($request->getUser());
-        foreach ($user->getDays() as $day) {
-            $day->prepareData();
-        }
 
         return $user;
     }
@@ -128,28 +105,6 @@ class UserService extends AbstractService
         $user->setApiKey(bin2hex(random_bytes(20)));
         $this->saveEntity($user);
         return $user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function fillDays(User $user)
-    {
-        for ($i = 1; $i <= 30; $i++) {
-            $day = new Day();
-            $day->setDayNumber($i);
-            $day->setUser($user);
-            $this->dayService->saveEntity($day);
-        }
-
-        $days = $this->dayService->getEntitiesBy(["user" => $user]);
-
-        /** @var Day $day */
-        foreach ($days as $day) {
-            $day->prepareData();
-        }
-
-        $user->setDays($days);
     }
 
     /**

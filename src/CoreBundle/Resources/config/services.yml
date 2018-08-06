@@ -4,3 +4,6 @@ imports:
   - resource: DayServices.yml
   - resource: VoterServices.yml
   - resource: CurrentUserServices.yml
+  - resource: StatusServices.yml
+  - resource: ChallengeServices.yml
+  - resource: ParticipantService.yml

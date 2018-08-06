@@ -6,7 +6,7 @@ use CoreBundle\Entity\Day;
 use CoreBundle\Model\Request\Training\TrainingCreateRequest;
 use CoreBundle\Model\Request\Training\TrainingUpdateRequest;
 use CoreBundle\Service\Day\DayService;
-use CoreBundle\Service\User\UserService;
+use CoreBundle\Service\Participant\ParticipantService;
 use RestBundle\Entity\EntityInterface;
 use RestBundle\Service\AbstractService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,9 +22,9 @@ class TrainingService extends AbstractService
     const MARATHONE_FINISH = 3000;
 
     /**
-     * @var UserService
+     * @var ParticipantService
      */
-    private $userService;
+    private $participantService;
 
     /**
      * @var DayService
@@ -35,14 +35,14 @@ class TrainingService extends AbstractService
      * TrainingService constructor.
      * @param ContainerInterface $container
      * @param string $entityClass
-     * @param UserService $userService
+     * @param ParticipantService $participantService
      * @param DayService $dayService
      */
-    public function __construct(ContainerInterface $container, string $entityClass, UserService $userService, DayService $dayService
+    public function __construct(ContainerInterface $container, string $entityClass, ParticipantService $participantService, DayService $dayService
     ) {
         parent::__construct($container, $entityClass);
         $this->setContainer($container);
-        $this->userService = $userService;
+        $this->participantService = $participantService;
         $this->dayService = $dayService;
     }
 
@@ -55,7 +55,7 @@ class TrainingService extends AbstractService
         $day = $this->dayService->getEntityBy(
             [
                 'dayNumber' => $request->getDay(),
-                'user' => $request->getUser()
+                'participant' => $request->getParticipant()
             ]
         );
 
@@ -68,7 +68,7 @@ class TrainingService extends AbstractService
         /** @var Day[] $days */
         $days = $this->dayService->getEntitiesBy(
             [
-                'user' => $request->getUser()
+                'participant' => $request->getParticipant()
             ]
         );
 
@@ -82,10 +82,9 @@ class TrainingService extends AbstractService
         }
 
         if ($pushUps >= self::MARATHONE_FINISH) {
-            $user = $request->getUser();
-            $currentDate = new \DateTime();
-            $user->setFinishDate($currentDate->getTimestamp());
-            $this->userService->saveEntity($user);
+            $participant = $request->getParticipant();
+            $participant->setFinishDate(new \DateTime());
+            $this->participantService->saveEntity($participant);
         }
 
         return $training;
@@ -104,7 +103,7 @@ class TrainingService extends AbstractService
             $this->saveEntity($training);
         }
 
-        $training->getDay()->prepareData();
+        $this->dayService->prepareData($training->getDay());
 
         return $training;
     }

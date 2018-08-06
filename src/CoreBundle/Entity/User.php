@@ -92,31 +92,23 @@ class User implements  UserInterface, NDUserInterface
     private $roles;
 
     /**
-     * @var ArrayCollection|Day[]
+     * @var ArrayCollection|Participant[]
      *
-     * @JMS\Type("array<CoreBundle\Entity\Day>")
-     * @JMS\Groups({"get_user", "get_users", "post_user"})
+     * @JMS\Exclude
+     *
+     * @JMS\Type("array<CoreBundle\Entity\Participant>")
      *
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\OneToMany(targetEntity="Day", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Participant", mappedBy="user", cascade={"persist"})
      */
-    private $days;
-
-    /**
-     * @var int
-     *
-     * @JMS\Type("int")
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $finishDate;
+    private $participants;
 
     /**
      * User constructor.
      */
     public function __construct()
     {
-        $this->days = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     /**
@@ -184,25 +176,6 @@ class User implements  UserInterface, NDUserInterface
     }
 
     /**
-     * @return Day[]|ArrayCollection
-     */
-    public function getDays()
-    {
-        return $this->days;
-    }
-
-    /**
-     * @param $days
-     * @return User
-     */
-    public function setDays($days): self
-    {
-        $this->days = $days;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getPassword()
@@ -238,22 +211,6 @@ class User implements  UserInterface, NDUserInterface
     {
         $this->roles = $roles;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFinishDate(): int
-    {
-        return $this->finishDate;
-    }
-
-    /**
-     * @param int $finishDate
-     */
-    public function setFinishDate(int $finishDate)
-    {
-        $this->finishDate = $finishDate;
     }
 
     public function getSalt()
