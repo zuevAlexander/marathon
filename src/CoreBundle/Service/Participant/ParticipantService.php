@@ -50,7 +50,7 @@ class ParticipantService extends AbstractService
             $this->getEntityBy(['user' => $request->getUser(), 'challenge' => $request->getChallenge()]);
             throw new ParticipantAlreadyExistsException();
         } catch (EntityNotFoundException $e) {
-            // we haven't found user - that's ok
+            // we haven't found participant - that's ok
         }
 
         $participant = $this->createEntity();

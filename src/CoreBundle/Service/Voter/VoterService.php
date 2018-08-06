@@ -38,7 +38,7 @@ class VoterService extends AbstractService
             $this->getEntityBy(['votingEmail' => $request->getVotingEmail()]);
             throw new VoterAlreadyExistsException();
         } catch (EntityNotFoundException $e) {
-            // we haven't found user - that's ok
+            // we haven't found voter - that's ok
         }
 
         $voter = $this->createEntity();

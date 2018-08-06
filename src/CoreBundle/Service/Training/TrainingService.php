@@ -19,8 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TrainingService extends AbstractService
 {
-    const MARATHONE_FINISH = 3000;
-
     /**
      * @var ParticipantService
      */
@@ -52,10 +50,12 @@ class TrainingService extends AbstractService
      */
     public function createTraining(TrainingCreateRequest $request): Training
     {
+        $participant = $request->getParticipant();
+
         $day = $this->dayService->getEntityBy(
             [
                 'dayNumber' => $request->getDay(),
-                'participant' => $request->getParticipant()
+                'participant' => $participant
             ]
         );
 
@@ -68,21 +68,20 @@ class TrainingService extends AbstractService
         /** @var Day[] $days */
         $days = $this->dayService->getEntitiesBy(
             [
-                'participant' => $request->getParticipant()
+                'participant' => $participant
             ]
         );
 
-        $pushUps = 0;
+        $marathonAmount = 0;
 
         foreach ($days as $day) {
             $trainings = $day->getTrainings();
-            foreach ($trainings as $training) {
-                $pushUps += $training->getAmount();
+            foreach ($trainings as $oldTraining) {
+                $marathonAmount += $oldTraining->getAmount();
             }
         }
 
-        if ($pushUps >= self::MARATHONE_FINISH) {
-            $participant = $request->getParticipant();
+        if ($marathonAmount >= $participant->getChallenge()->getChallengeGoal() && $participant->getFinishDate() == null) {
             $participant->setFinishDate(new \DateTime());
             $this->participantService->saveEntity($participant);
         }

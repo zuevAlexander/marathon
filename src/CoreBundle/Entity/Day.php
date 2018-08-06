@@ -52,7 +52,6 @@ class Day implements  EntityInterface
     /**
      * @var ArrayCollection|Training[]
      *
-//     * @JMS\Groups({"get_user"})
      * @JMS\Exclude()
      *
      * @ORM\OrderBy({"id" = "ASC"})
@@ -65,7 +64,7 @@ class Day implements  EntityInterface
      *
      * @JMS\Type("integer")
      */
-    private $pushUps;
+    private $amount;
 
     /**
      * @var int
@@ -157,18 +156,18 @@ class Day implements  EntityInterface
     /**
      * @return int
      */
-    public function getPushUps(): int
+    public function getAmount(): int
     {
-        return $this->pushUps;
+        return $this->amount;
     }
 
     /**
-     * @param int $pushUps
+     * @param int $amount
      * @return Day
      */
-    public function setPushUps(int $pushUps): self
+    public function setAmount(int $amount): self
     {
-        $this->pushUps = $pushUps;
+        $this->amount = $amount;
 
         return $this;
     }
@@ -210,22 +209,4 @@ class Day implements  EntityInterface
 
         return $this;
     }
-
-//    /**
-//     * @return Day
-//     */
-//    public function prepareData(): self
-//    {
-//        $trainings = $this->trainings;
-//        $this->times = $trainings->count();
-//        $this->pushUps = 0;
-//
-//        foreach ($trainings as $training) {
-//            $this->pushUps += $training->getAmount();
-//        }
-//
-//        $this->isCurrent = ceil((time() - self::FIRST_DAY) / 24 / 60 / 60) == $this->getDayNumber();
-//
-//        return $this;
-//    }
 }

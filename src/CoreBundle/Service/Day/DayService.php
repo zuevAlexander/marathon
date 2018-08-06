@@ -32,12 +32,12 @@ class DayService extends AbstractService
         $trainings = $day->getTrainings();
         $day->setTimes($trainings->count());
 
-        $pushUps = 0;
+        $dayAmount = 0;
         foreach ($trainings as $training) {
-            $pushUps += $training->getAmount();
+            $dayAmount += $training->getAmount();
         }
 
-        $day->setPushUps($pushUps);
+        $day->setAmount($dayAmount);
 
         $day->setIsCurrent(ceil((time() - $day->getParticipant()->getChallenge()->getStartDate()->getTimestamp()) / 24 / 60 / 60) == $day->getDayNumber());
 
