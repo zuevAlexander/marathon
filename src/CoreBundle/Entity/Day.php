@@ -52,7 +52,7 @@ class Day implements  EntityInterface
     /**
      * @var ArrayCollection|Training[]
      *
-     * @JMS\Exclude()
+     * @JMS\Groups({"get_participant"})
      *
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\OneToMany(targetEntity="Training", mappedBy="day", cascade={"persist", "remove"})
@@ -72,13 +72,6 @@ class Day implements  EntityInterface
      * @JMS\Type("integer")
      */
     private $times;
-
-    /**
-     * @var boolean
-     *
-     * @JMS\Type("boolean")
-     */
-    private $isCurrent;
 
     /**
      * Day constructor.
@@ -187,25 +180,6 @@ class Day implements  EntityInterface
     public function setTimes(int $times): self
     {
         $this->times = $times;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getIsCurrent(): bool
-    {
-        return $this->isCurrent;
-    }
-
-    /**
-     * @param bool $isCurrent
-     * @return Day
-     */
-    public function setIsCurrent(bool $isCurrent): self
-    {
-        $this->isCurrent = $isCurrent;
 
         return $this;
     }

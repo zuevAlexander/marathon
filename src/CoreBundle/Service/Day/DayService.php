@@ -39,8 +39,6 @@ class DayService extends AbstractService
 
         $day->setAmount($dayAmount);
 
-        $day->setIsCurrent(ceil((time() - $day->getParticipant()->getChallenge()->getStartDate()->getTimestamp()) / 24 / 60 / 60) == $day->getDayNumber());
-
         return $day;
     }
 }
