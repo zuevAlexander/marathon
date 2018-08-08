@@ -3,24 +3,22 @@
 namespace CoreBundle\Model\Request\Vote;
 
 use CoreBundle\Entity\Challenge;
-use CoreBundle\Entity\Rating;
-use Doctrine\Common\Collections\ArrayCollection;
+use RestBundle\Request\AbstractRequest;
+use RestBundle\Request\ListRequestInterface;
+use RestBundle\Request\ListRequestTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class VoteCreateRequest.
+ * Class VoteListRequest
+ * @package CoreBundle\Model\Request\Vote
  */
-class VoteCreateRequest
+class VoteListRequest extends AbstractRequest implements ListRequestInterface
 {
+    use ListRequestTrait;
     /**
      * @var Challenge
      */
     private $challenge;
-
-    /**
-     * @var ArrayCollection
-     */
-    private $ratings;
 
     /**
      * TrainingCreateRequest constructor.
@@ -28,26 +26,6 @@ class VoteCreateRequest
     public function __construct()
     {
         $this->challenge = new Challenge();
-        $this->ratings = new ArrayCollection();
-    }
-
-    /**
-     * @return ArrayCollection|Rating[]
-     */
-    public function getRatings()
-    {
-        return $this->ratings;
-    }
-
-    /**
-     * @param $ratings
-     * @return VoteCreateRequest
-     */
-    public function setRatings($ratings): self
-    {
-        $this->ratings = $ratings;
-
-        return $this;
     }
 
     /**
@@ -60,7 +38,7 @@ class VoteCreateRequest
 
     /**
      * @param Challenge $challenge
-     * @return VoteCreateRequest
+     * @return VoteListRequest
      */
     public function setChallenge(Challenge $challenge)
     {

@@ -2,6 +2,7 @@
 
 namespace CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use RestBundle\Entity\EntityInterface;
@@ -31,45 +32,53 @@ class Vote implements  EntityInterface
     private $id;
 
     /**
+     * @var Challenge
+     *
+     * @JMS\Type("CoreBundle\Entity\Challenge")
+     * @JMS\Exclude()
+     *
+     * @ORM\ManyToOne(targetEntity="Challenge", cascade={"persist"})
+     * @ORM\JoinColumn(name="challenge_id", referencedColumnName="id", nullable=false)
+     */
+    private $challenge;
+
+    /**
      * @var User
      *
      * @JMS\Type("CoreBundle\Entity\User")
      *
-     * @Assert\NotBlank()
-     *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="User", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
 
     /**
-     * @var Voter
+     * @var ArrayCollection|Rating[]
      *
-     * @JMS\Type("CoreBundle\Entity\Voter")
+     * @JMS\Type("array<CoreBundle\Entity\Rating>")
      *
-     * @Assert\NotBlank()
-     *
-     * @ORM\ManyToOne(targetEntity="Voter", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="voter_id", referencedColumnName="id", nullable=false)
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Rating", mappedBy="vote", cascade={"persist", "remove"})
      */
-    private $voter;
+    private $ratings;
 
     /**
-     * @var int
+     * @var \DateTime
      *
-     * @Assert\NotBlank()
+     * @JMS\Type("DateTime<'U'>")
      *
-     * @ORM\Column(name="place", type="integer", unique=false)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $place;
+    private $date;
 
     /**
-     * Voter constructor.
+     * Vote constructor.
      */
     public function __construct()
     {
         $this->user = new User();
-        $this->voter = new Voter();
+        $this->challenge = new Challenge();
+        $this->ratings = new ArrayCollection();
     }
 
     /**
@@ -81,20 +90,20 @@ class Vote implements  EntityInterface
     }
 
     /**
-     * @return int
+     * @return Rating[]|ArrayCollection
      */
-    public function getPlace(): int
+    public function getRatings(): ArrayCollection
     {
-        return $this->place;
+        return $this->ratings;
     }
 
     /**
-     * @param int $place
+     * @param ArrayCollection $ratings
      * @return Vote
      */
-    public function setPlace(int $place): self
+    public function setRatings(ArrayCollection $ratings): self
     {
-        $this->place = $place;
+        $this->ratings = $ratings;
 
         return $this;
     }
@@ -119,20 +128,39 @@ class Vote implements  EntityInterface
     }
 
     /**
-     * @return Voter
+     * @return Challenge
      */
-    public function getVoter(): Voter
+    public function getChallenge(): Challenge
     {
-        return $this->voter;
+        return $this->challenge;
     }
 
     /**
-     * @param Voter $voter
+     * @param Challenge $challenge
      * @return Vote
      */
-    public function setVoter(Voter $voter): self
+    public function setChallenge(Challenge $challenge): self
     {
-        $this->voter = $voter;
+        $this->challenge = $challenge;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate(): \DateTime
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return Vote
+     */
+    public function setDate(\DateTime $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

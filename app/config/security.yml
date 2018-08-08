@@ -22,7 +22,8 @@ security:
             security: false
 
         voting:
-            pattern: ^/api/voting*
+            pattern: ^/api/votes*
+            methods: [GET]
             security: false
 
         challenge:

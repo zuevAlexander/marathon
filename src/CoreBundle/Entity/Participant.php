@@ -35,6 +35,7 @@ class Participant implements  EntityInterface
      * @var Challenge
      *
      * @JMS\Type("CoreBundle\Entity\Challenge")
+     * @JMS\Groups({"post_participant", "get_participant"})
      *
      * @ORM\ManyToOne(targetEntity="Challenge", cascade={"persist"})
      * @ORM\JoinColumn(name="challenge_id", referencedColumnName="id", nullable=false)

@@ -3,20 +3,18 @@
 namespace CoreBundle\Form\Vote;
 
 use CoreBundle\Entity\Challenge;
-use CoreBundle\Form\Rating\RatingCreateType;
-use CoreBundle\Model\Request\Vote\VoteCreateRequest;
-use RestBundle\Form\AbstractFormType;
+use CoreBundle\Model\Request\Vote\VoteListRequest;
+use RestBundle\Form\AbstractFormGetListType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 /**
- * Class VoteCreateType
- * @package CoreBundle\Form\Vote
+ * Class ChallengeListType
+ * @package CoreBundle\Form\Challenge
  */
-class VoteCreateType extends AbstractFormType
+class VoteListType extends AbstractFormGetListType
 {
-    const DATA_CLASS = VoteCreateRequest::class;
+    const DATA_CLASS = VoteListRequest::class;
 
     /**
      * @param FormBuilderInterface $builder
@@ -30,10 +28,6 @@ class VoteCreateType extends AbstractFormType
                     'required' => true,
                     'invalid_message' => 'Challenge is not found',
                 ]
-            )
-            ->add('ratings', CollectionType::class, [
-                'entry_type' => RatingCreateType::class,
-                'allow_add' => true,
-            ]);
+            );
     }
 }

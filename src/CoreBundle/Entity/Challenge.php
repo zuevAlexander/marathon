@@ -114,11 +114,23 @@ class Challenge implements  EntityInterface
     private $participants;
 
     /**
+     * @var ArrayCollection|Vote[]
+     *
+     * @JMS\Type("array<CoreBundle\Entity\Vote>")
+     * @JMS\Groups({"get_votes"})
+     *
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Vote", mappedBy="challenge", cascade={"persist", "remove"})
+     */
+    private $votes;
+
+    /**
      * Day constructor.
      */
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->votes = new ArrayCollection();
         $this->status = new Status();
     }
 
@@ -316,6 +328,25 @@ class Challenge implements  EntityInterface
     public function setParticipants(Collection $participants)
     {
         $this->participants = $participants;
+
+        return $this;
+    }
+
+    /**
+     * @return Vote[]|Collection
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    /**
+     * @param Collection $votes
+     * @return $this
+     */
+    public function setVotes(Collection $votes)
+    {
+        $this->votes = $votes;
 
         return $this;
     }

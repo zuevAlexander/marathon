@@ -10,8 +10,8 @@ api_training:
   prefix: /api
   defaults:
     _format: json
-api_voter:
-  resource: '@ApiBundle/Controller/VoterController.php'
+api_vote:
+  resource: '@ApiBundle/Controller/VoteController.php'
   type: rest
   prefix: /api
   defaults:
