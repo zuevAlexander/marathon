@@ -112,6 +112,14 @@ class User implements  UserInterface, NDUserInterface
     }
 
     /**
+     * User constructor.
+     */
+    public function __toString()
+    {
+        return $this->getEmail();
+    }
+
+    /**
      * @return mixed
      */
     public function getApiKey()

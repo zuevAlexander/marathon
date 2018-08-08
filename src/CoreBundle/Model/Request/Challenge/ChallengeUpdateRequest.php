@@ -91,6 +91,7 @@ class ChallengeUpdateRequest extends AbstractRequest
     {
         $this->status = new Status();
         $this->challenge = new Challenge();
+        $this->participants = new ArrayCollection();
     }
 
     /**
@@ -251,5 +252,24 @@ class ChallengeUpdateRequest extends AbstractRequest
     public function setAlias(string $alias)
     {
         $this->alias = $alias;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getParticipants()
+    {
+        return $this->participants;
+    }
+
+    /**
+     * @param $participants
+     * @return ChallengeUpdateRequest
+     */
+    public function setParticipants($participants): self
+    {
+        $this->participants = $participants;
+
+        return $this;
     }
 }

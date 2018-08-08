@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class VoteAlreadyExistsException extends \RuntimeException
 {
-    public function __construct($message = 'You have already voted for this challenge', $code = Response::HTTP_FORBIDDEN, Exception $previous = null)
+    public function __construct($message = 'You have already voted for this challenge', $code = Response::HTTP_BAD_REQUEST, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

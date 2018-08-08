@@ -83,20 +83,11 @@ class ChallengeService extends AbstractService
 
         $this->saveEntity($challenge);
 
-        /**
-         * User[] $users
-         */
-        $newParticipants = $request->getParticipants();
-        foreach ($newParticipants as $newParticipant) {
-            $participant = new Participant();
-            $participant->setUser($newParticipant->getUser());
-            $participant->setChallenge($challenge);
-
-            $challengeDuration = ($request->getEndDate() - $request->getStartDate()) / 60 / 60 / 24 + 1;
-            $participant = $this->participantService->fillDays($participant, $challengeDuration);
-
-            $challenge->addParticipant($participant);
+        $newParticipants = [];
+        foreach ($request->getParticipants() as $participant) {
+            $newParticipants[] = $participant->getUser();
         }
+        $challenge = $this->addParticipants($newParticipants, $challenge);
 
         $this->saveEntity($challenge);
 
@@ -111,13 +102,7 @@ class ChallengeService extends AbstractService
     {
         $challenge = $request->getChallenge();
 
-        foreach ($challenge->getParticipants() as $participant) {
-            foreach ($participant->getDays() as $day) {
-                $this->dayService->prepareData($day);
-            }
-        }
-
-        return $challenge;
+        return $this->prepareDays($challenge);
     }
 
     /**
@@ -137,32 +122,27 @@ class ChallengeService extends AbstractService
     {
         $challenge = $request->getChallenge();
 
-        if ($request->getName()) {
-            $challenge->setName($request->getName());
-        }
+        $challenge->setName($request->getName());
+        $challenge->setAuthor($request->getAuthor());
+        $challenge->setDescription($request->getDescription());
+        $challenge->setAlias($request->getAlias());
+        $challenge->setDailyGoal($request->getDailyGoal());
+        $challenge->setChallengeGoal($request->getChallengeGoal());
+        $challenge->setStatus($request->getStatus());
 
-        if ($request->getAuthor()) {
-            $challenge->setAuthor($request->getAuthor());
-        }
+        $endDateChanged = $request->getEndDate() != $challenge->getEndDate()->getTimestamp();
+        $startDateChanged = $request->getStartDate() != $challenge->getStartDate()->getTimestamp();
 
-        if ($request->getDescription()) {
-            $challenge->setDescription($request->getDescription());
-        }
-
-        if ($request->getAlias()) {
-            $challenge->setAlias($request->getAlias());
-        }
-
-        if ($request->getStartDate() || $request->getEndDate()) {
-            if ($request->getStartDate() && new \DateTime() > $challenge->getStartDate()) {
+        if ($startDateChanged || $endDateChanged) {
+            if ($startDateChanged && new \DateTime() > $challenge->getStartDate()) {
                 throw new MarathonAlreadyStartedException();
             }
 
-            if (new \DateTime() > $challenge->getEndDate()) {
+            if ($endDateChanged && new \DateTime() > $challenge->getEndDate()) {
                 throw new MarathonAlreadyFinishedException();
             }
 
-            if ($request->getEndDate() && time() > $request->getEndDate()) {
+            if ($endDateChanged  && time() > $request->getEndDate()) {
                 throw new IncorrectMarathonEndDateException();
             }
 
@@ -180,20 +160,77 @@ class ChallengeService extends AbstractService
             }
         }
 
-        if ($request->getDailyGoal()) {
-            $challenge->setDailyGoal($request->getDailyGoal());
+        $newParticipants = [];
+        foreach ($request->getParticipants() as $participant) {
+            $newParticipants[] = $participant->getUser();
         }
 
-        if ($request->getChallengeGoal()) {
-            $challenge->setChallengeGoal($request->getChallengeGoal());
+        $oldParticipants = [];
+        foreach ($request->getChallenge()->getParticipants() as $participant) {
+            $oldParticipants[] = $participant->getUser();
         }
 
-        if (!$request->getStatus()->isNull()) {
-            $challenge->setStatus($request->getStatus());
+        $participantsToAdd = array_diff($newParticipants, $oldParticipants);
+        $participantsToDelete = array_diff($oldParticipants, $newParticipants);
+
+        $challenge = $this->addParticipants($participantsToAdd, $challenge);
+        $challenge = $this->removeParticipants($participantsToDelete, $challenge);
+
+        $this->saveEntity($challenge);
+
+        return $this->prepareDays($challenge);
+    }
+
+    /**
+     * @param array $newParticipants
+     * @param Challenge $challenge
+     * @return Challenge
+     */
+    public function addParticipants(array $newParticipants = [], Challenge $challenge): Challenge
+    {
+        foreach ($newParticipants as $user) {
+            $participant = new Participant();
+            $participant->setUser($user);
+            $participant->setChallenge($challenge);
+
+            $challengeDuration = ($challenge->getEndDate()->getTimestamp() - $challenge->getStartDate()->getTimestamp()) / 60 / 60 / 24 + 1;
+            $participant = $this->participantService->fillDays($participant, $challengeDuration);
+
+            $challenge->addParticipant($participant);
+        }
+
+        return $challenge;
+    }
+
+    /**
+     * @param array $oldParticipants
+     * @param Challenge $challenge
+     * @return Challenge
+     */
+    public function removeParticipants(array $oldParticipants = [], Challenge $challenge): Challenge
+    {
+        foreach ($oldParticipants as $user) {
+            $participant = $this->participantService->getEntityBy(['user' => $user, 'challenge' => $challenge]);
+            $challenge->removeParticipant($participant);
         }
 
         $this->saveEntity($challenge);
 
+        return $challenge;
+    }
+
+    /**
+     * @param Challenge $challenge
+     * @return Challenge
+     */
+    public function prepareDays(Challenge $challenge): Challenge
+    {
+        foreach ($challenge->getParticipants() as $participant) {
+            foreach ($participant->getDays() as $day) {
+                $this->dayService->prepareData($day);
+            }
+        }
+        
         return $challenge;
     }
 }

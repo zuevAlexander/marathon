@@ -61,7 +61,7 @@ class ChallengeHandler implements ChallengeProcessorInterface
      * @param ChallengeUpdateRequest $request
      * @return Challenge
      */
-    public function processPatch(ChallengeUpdateRequest $request): Challenge
+    public function processPut(ChallengeUpdateRequest $request): Challenge
     {
         return $this->challengeService->updateChallenge($request);
     }

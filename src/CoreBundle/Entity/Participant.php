@@ -56,7 +56,7 @@ class Participant implements  EntityInterface
      * @var ArrayCollection|Day[]
      *
      * @JMS\Type("array<CoreBundle\Entity\Day>")
-     * @JMS\Groups({"post_challenge", "get_challenge", "patch_challenge", "post_participant", "get_participant"})
+     * @JMS\Groups({"put_challenge", "get_challenge", "patch_challenge", "post_participant", "get_participant"})
      *
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\OneToMany(targetEntity="Day", mappedBy="participant", cascade={"persist", "remove"})

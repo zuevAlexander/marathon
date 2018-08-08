@@ -3,6 +3,7 @@
 namespace CoreBundle\Form\Challenge;
 
 use CoreBundle\Entity\Status;
+use CoreBundle\Form\Participant\ParticipantAddType;
 use CoreBundle\Form\Participant\ParticipantCreateType;
 use CoreBundle\Model\Request\Challenge\ChallengeUpdateRequest;
 use RestBundle\Form\AbstractFormType;
@@ -77,7 +78,11 @@ class ChallengeUpdateType extends AbstractFormType
                 [
                     'class' => Status::class,
                 ]
-            );
+            )
+            ->add('participants', CollectionType::class, [
+                'entry_type' => ParticipantAddType::class,
+                'allow_add' => true,
+            ]);
 
         $this->registerPreSubmitEventListener($builder);
     }

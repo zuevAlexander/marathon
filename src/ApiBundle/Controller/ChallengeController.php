@@ -122,7 +122,7 @@ class ChallengeController extends BaseController
      * @param Challenge $challenge
      * @return Response
      */
-    public function patchAction(Request $request, Challenge $challenge): Response
+    public function putAction(Request $request, Challenge $challenge): Response
     {
         return $this->process($request, ChallengeUpdateType::class);
     }

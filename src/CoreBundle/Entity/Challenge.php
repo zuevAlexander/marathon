@@ -106,10 +106,10 @@ class Challenge implements  EntityInterface
      * @var ArrayCollection|Participant[]
      *
      * @JMS\Type("array<CoreBundle\Entity\Participant>")
-     * @JMS\Groups({"post_challenge", "get_challenge", "patch_challenge"})
+     * @JMS\Groups({"put_challenge", "get_challenge", "patch_challenge"})
      *
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\OneToMany(targetEntity="Participant", mappedBy="challenge", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Participant", mappedBy="challenge", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $participants;
 
@@ -358,6 +358,17 @@ class Challenge implements  EntityInterface
     public function addParticipant(Participant $participant)
     {
         $this->participants->add($participant);
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     * @return $this
+     */
+    public function removeParticipant(Participant $participant)
+    {
+        $this->getParticipants()->removeElement($participant);
 
         return $this;
     }
