@@ -13,12 +13,12 @@ class RatingCreateRequest
     /**
      * @var Participant
      */
-    protected $participant;
+    private $participant;
 
     /**
      * @var int
      */
-    protected $place = 0;
+    private $place = 0;
 
     /**
      * TrainingCreateRequest constructor.

@@ -24,7 +24,8 @@ class ParticipantHandler implements ParticipantProcessorInterface
      * ParticipantHandler constructor.
      * @param ParticipantService $participantService
      */
-    public function __construct(ParticipantService $participantService) {
+    public function __construct(ParticipantService $participantService)
+    {
         $this->participantService = $participantService;
     }
 

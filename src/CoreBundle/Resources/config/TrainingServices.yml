@@ -14,3 +14,5 @@ services:
       - '%core.entity.training.class%'
       - '@core.service.participant'
       - '@core.service.day'
+      - '@core.service.current_user'
+      - '@security.authorization_checker'

@@ -1,0 +1,27 @@
+parameters:
+  core.handler.ldap_authorization.class: CoreBundle\Handler\LDAPAuthorizationHandler
+  core.service.ldap_authorization.class: CoreBundle\Service\LDAPAuthorization\LDAPAuthorizationService
+services:
+  core.handler.ldap_authorization:
+    class: '%core.handler.ldap_authorization.class%'
+    arguments:
+      - '@core.service.ldap_authorization'
+  core.service.ldap_authorization:
+    class: '%core.service.ldap_authorization.class%'
+    arguments:
+      - '@core.service.user'
+      - '@ldap_client'
+      - '@lexik_jwt_authentication.jwt_manager'
+      - '%ldap_base_dn%'
+  ldap_client:
+      class: Symfony\Component\Ldap\Ldap
+      arguments: ['@ldap_adapter']
+  ldap_adapter:
+      class: Symfony\Component\Ldap\Adapter\ExtLdap\Adapter
+      arguments:
+             -   host: '%ldap_host%'
+                 port: '%ldap_port%'
+                 encryption: '%ldap_encryption%'
+                 options:
+                     protocol_version: '%ldap_options_protocol_version%'
+                     referrals: '%ldap_options_referrals%'

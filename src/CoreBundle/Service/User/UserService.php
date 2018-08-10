@@ -2,19 +2,13 @@
 
 namespace CoreBundle\Service\User;
 
-use CoreBundle\Entity\Day;
 use CoreBundle\Entity\User;
 use CoreBundle\Model\Request\User\UserListRequest;
 use CoreBundle\Model\Request\User\UserReadRequest;
-use CoreBundle\Model\Request\User\UserRegisterRequest;
 use CoreBundle\Model\Request\User\UserUpdateRequest;
-use CoreBundle\Service\Day\DayService;
-use Doctrine\Common\Collections\ArrayCollection;
 use RestBundle\Service\AbstractService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use RestBundle\Entity\EntityInterface;
-use CoreBundle\Exception\User\UserAlreadyExistsException;
-use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
@@ -47,30 +41,6 @@ class UserService extends AbstractService
     }
 
     /**
-     * @param UserRegisterRequest $request
-     * @param string $role
-     * @return User
-     */
-    public function createUser(UserRegisterRequest $request, string $role = 'ROLE_USER'): User
-    {
-        try {
-            $this->getEntityBy(['username' => $request->getUsername()]);
-            throw new UserAlreadyExistsException();
-        } catch (EntityNotFoundException $e) {
-            // we haven't found user - that's ok
-        }
-
-        $user = $this->createEntity();
-        $user->setUsername($request->getUsername());
-        $user->setEmail($request->getEmail());
-        $user->setPassword($this->encoder->encodePassword($user, $request->getPassword()));
-        $user->setRoles(array($role));
-        $this->generateApiKey($user);
-
-        return $user;
-    }
-
-    /**
      * @param UserListRequest $request
      * @return array
      */
@@ -96,18 +66,6 @@ class UserService extends AbstractService
     }
 
     /**
-     * @param User $user
-     *
-     * @return User
-     */
-    public function generateApiKey(User $user) : User
-    {
-        $user->setApiKey(bin2hex(random_bytes(20)));
-        $this->saveEntity($user);
-        return $user;
-    }
-
-    /**
      * @param UserUpdateRequest $request
      * @return User
      */
@@ -115,8 +73,12 @@ class UserService extends AbstractService
     {
         $user = $request->getUser();
 
-        if ($request->getUsername()) {
-            $user->setUsername($request->getUsername());
+        if ($request->getName()) {
+            $user->setUsername($request->getName());
+        }
+
+        if ($request->getEmail()) {
+            $user->setEmail($request->getEmail());
         }
 
         if ($request->getEmail()) {

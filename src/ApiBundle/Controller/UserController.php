@@ -6,8 +6,6 @@ use CoreBundle\Entity\User;
 use CoreBundle\Form\User\UserUpdateType;
 use CoreBundle\Form\User\UserDeleteType;
 use CoreBundle\Form\User\UserListType;
-use CoreBundle\Form\User\UserLoginType;
-use CoreBundle\Form\User\UserRegisterType;
 use CoreBundle\Form\User\UserReadType;
 use RestBundle\Controller\BaseController;
 use RestBundle\Handler\ProcessorInterface;
@@ -24,87 +22,6 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
  */
 class UserController extends BaseController
 {
-    /**
-     * @ApiDoc(
-     *  resource=true,
-     *  section="User",
-     *  description="Login user",
-     *  input={
-     *       "class" = "CoreBundle\Form\User\UserLoginType",
-     *       "name" = ""
-     *  },
-     *  statusCodes={
-     *      200 = "Ok",
-     *      400 = "Bad format",
-     *      403 = "Access denied"
-     *  }
-     *)
-     * @Annotations\Post("/login")
-     *
-     * @param Request $request
-     *
-     * @return Response
-     *
-     * @throws \Exception
-     */
-    public function postLoginAction(Request $request) : Response
-    {
-        return $this->process($request, UserLoginType::class);
-    }
-
-    /**
-     * @ApiDoc(
-     *  resource=true,
-     *  section="User",
-     *  description="Register user",
-     *  input={
-     *       "class" = "CoreBundle\Form\User\UserRegisterType",
-     *       "name" = ""
-     *  },
-     *  statusCodes={
-     *      200 = "Ok",
-     *      400 = "Bad format"
-     *  }
-     *)
-     * @Annotations\Post("/register")
-     *
-     * @param Request $request
-     *
-     * @return Response
-     *
-     * @throws \Exception
-     */
-    public function postRegisterAction(Request $request) : Response
-    {
-        return $this->process($request, UserRegisterType::class, Response::HTTP_CREATED);
-    }
-
-    /**
-     * @ApiDoc(
-     *  resource=true,
-     *  section="User",
-     *  description="Create new user",
-     *  input={
-     *       "class" = "CoreBundle\Form\User\UserRegisterType",
-     *       "name" = ""
-     *  },
-     *  statusCodes={
-     *      200 = "Ok",
-     *      204 = "Entity not found",
-     *      400 = "Bad format",
-     *      403 = "Forbidden"
-     *  }
-     *)
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function postAction(Request $request) : Response
-    {
-        return $this->process($request, UserRegisterType::class, Response::HTTP_CREATED);
-    }
-
     /**
      * @ApiDoc(
      *  resource=true,

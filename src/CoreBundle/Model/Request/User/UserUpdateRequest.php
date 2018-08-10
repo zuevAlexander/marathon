@@ -18,12 +18,17 @@ class UserUpdateRequest extends AbstractRequest
     /**
      * @var string
      */
-    private $username = '';
+    private $name = '';
 
     /**
      * @var string
      */
     private $email = '';
+
+    /**
+     * @var string
+     */
+    private $fullName = '';
 
     /**
      * @inheritDoc
@@ -71,16 +76,32 @@ class UserUpdateRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function getUsername(): string
+    public function getName(): string
     {
-        return $this->username;
+        return $this->name;
     }
 
     /**
-     * @param string $username
+     * @param string $name
      */
-    public function setUsername(string $username)
+    public function setName(string $name)
     {
-        $this->username = $username;
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @param string $fullName
+     */
+    public function setFullName(string $fullName)
+    {
+        $this->fullName = $fullName;
     }
 }

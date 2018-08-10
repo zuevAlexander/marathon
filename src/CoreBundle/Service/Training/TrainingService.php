@@ -2,14 +2,18 @@
 namespace CoreBundle\Service\Training;
 
 use CoreBundle\Entity\Training;
+use CoreBundle\Entity\User;
 use CoreBundle\Entity\Day;
+use CoreBundle\Exception\User\BadCredentialsException;
 use CoreBundle\Model\Request\Training\TrainingCreateRequest;
 use CoreBundle\Model\Request\Training\TrainingUpdateRequest;
 use CoreBundle\Service\Day\DayService;
+use CoreBundle\Service\CurrentUser\CurrentUserService;
 use CoreBundle\Service\Participant\ParticipantService;
 use RestBundle\Entity\EntityInterface;
 use RestBundle\Service\AbstractService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class UserService
@@ -30,26 +34,45 @@ class TrainingService extends AbstractService
     private $dayService;
 
     /**
+     * @var User
+     */
+    private  $currentUser;
+
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $authChecker;
+
+    /**
      * TrainingService constructor.
      * @param ContainerInterface $container
      * @param string $entityClass
      * @param ParticipantService $participantService
      * @param DayService $dayService
+     * @param CurrentUserService $currentUserService
+     * @param AuthorizationCheckerInterface $authChecker
      */
-    public function __construct(ContainerInterface $container, string $entityClass, ParticipantService $participantService, DayService $dayService
-    ) {
+    public function __construct(ContainerInterface $container, string $entityClass, ParticipantService $participantService, DayService $dayService, CurrentUserService $currentUserService, AuthorizationCheckerInterface $authChecker)
+    {
         parent::__construct($container, $entityClass);
         $this->setContainer($container);
         $this->participantService = $participantService;
         $this->dayService = $dayService;
+        $this->currentUser = $currentUserService->getCurrentUser();
+        $this->authChecker = $authChecker;
     }
 
     /**
      * @param TrainingCreateRequest $request
      * @return Training
+     * @throws \Exception
      */
     public function createTraining(TrainingCreateRequest $request): Training
     {
+        if (false === $this->authChecker->isGranted('ROLE_ADMIN') && $request->getParticipant()->getUser() != $this->currentUser) {
+            throw new BadCredentialsException();
+        }
+
         $participant = $request->getParticipant();
 
         $day = $this->dayService->getEntityBy(

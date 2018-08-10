@@ -17,7 +17,7 @@ class CurrentUserService
     /**
      * @var TokenStorageInterface
      */
-    protected $tokenStorage;
+    private $tokenStorage;
 
     /**
      * CurrentUserService constructor.

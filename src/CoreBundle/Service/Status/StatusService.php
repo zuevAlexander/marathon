@@ -21,8 +21,8 @@ class StatusService extends AbstractService
      * @param ContainerInterface $container
      * @param string $entityClass
      */
-    public function __construct(ContainerInterface $container, string $entityClass
-    ) {
+    public function __construct(ContainerInterface $container, string $entityClass)
+    {
         parent::__construct($container, $entityClass);
         $this->setContainer($container);
     }

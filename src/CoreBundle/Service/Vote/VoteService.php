@@ -1,6 +1,7 @@
 <?php
 namespace CoreBundle\Service\Vote;
 
+use CoreBundle\Entity\User;
 use CoreBundle\Entity\Vote;
 use CoreBundle\Entity\Rating;
 use CoreBundle\Exception\Vote\VoteAlreadyExistsException;
@@ -21,9 +22,9 @@ use Doctrine\ORM\EntityNotFoundException;
 class VoteService extends AbstractService
 {
     /**
-     * @var CurrentUserService
+     * @var User
      */
-    private  $currentUserService;
+    private  $currentUser;
 
     /**
      * VoteService constructor.
@@ -31,10 +32,11 @@ class VoteService extends AbstractService
      * @param string $entityClass
      * @param CurrentUserService $currentUserService
      */
-    public function __construct(ContainerInterface $container, string $entityClass, CurrentUserService $currentUserService) {
+    public function __construct(ContainerInterface $container, string $entityClass, CurrentUserService $currentUserService)
+    {
         parent::__construct($container, $entityClass);
         $this->setContainer($container);
-        $this->currentUserService = $currentUserService;
+        $this->currentUser = $currentUserService->getCurrentUser();
     }
 
     /**
@@ -43,11 +45,10 @@ class VoteService extends AbstractService
      */
     public function createVote(VoteCreateRequest $request): Vote
     {
-        $currentUser = $this->currentUserService->getCurrentUser();
         try {
             $this->getEntityBy(
                 [
-                    'user' => $currentUser,
+                    'user' => $this->currentUser,
                     'challenge' => $request->getChallenge(),
                 ]
             );
@@ -58,7 +59,7 @@ class VoteService extends AbstractService
 
         $vote = $this->createEntity();
         $vote->setChallenge($request->getChallenge());
-        $vote->setUser($currentUser);
+        $vote->setUser($this->currentUser);
         $vote->setDate(new \DateTime());
         $this->saveEntity($vote);
 

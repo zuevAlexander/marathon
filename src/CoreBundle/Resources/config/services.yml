@@ -7,3 +7,4 @@ imports:
   - resource: StatusServices.yml
   - resource: ChallengeServices.yml
   - resource: ParticipantService.yml
+  - resource: LDAPAuthorizationServices.yml

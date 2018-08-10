@@ -15,6 +15,18 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    jwt_private_key_path: '%kernel.root_dir%/var/jwt/private.pem' # ssh private key path
+    jwt_public_key_path:  '%kernel.root_dir%/var/jwt/public.pem'  # ssh public key path
+    jwt_key_pass_phrase:  'marathon'                              # ssh key pass phrase
+    jwt_token_ttl:        3600
+
+    ldap_host: mimir.norse.digital
+    ldap_port: 389
+    ldap_encryption: none
+    ldap_options_protocol_version: 2
+    ldap_options_referrals: null
+    ldap_base_dn: 'dc=nxc,dc=no'
+
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
-
+    secret_password: ~

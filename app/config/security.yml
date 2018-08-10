@@ -1,25 +1,29 @@
 security:
-    encoders:
-        CoreBundle\Entity\User:
-            algorithm: bcrypt
-            cost: 12
-
     providers:
-        webservice:
-            id: guard_bundle.webservice_user_provider
+        user_provider:
+            entity:
+                class: CoreBundle\Entity\User
+                property: name
+        in_memory:
+            memory: ~
 
     firewalls:
+        login:
+            pattern: ^/api/login
+            anonymous: true
+            form_login:
+                check_path:               /api/login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+
         dev:
             pattern: ^/_wdt
             security: false
 
         api_doc:
             pattern: ^/doc
-            security: false
-
-        register:
-            pattern: ^/api/register
-            security: false
+            anonymous: true
 
         voting:
             pattern: ^/api/votes*
@@ -36,20 +40,16 @@ security:
             methods: [GET]
             security: false
 
-        login:
-            pattern: ^/api/login
-            stateless: true
+        api:
+            pattern:   ^/api
+            provider: user_provider
             guard:
                 authenticators:
-                    - guard_bundle.password_authenticator
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
         main:
-            pattern: ^/
-            stateless: true
-            guard:
-                authenticators:
-                    - guard_bundle.token_authenticator
+            anonymous: ~
 
     access_control:
         # require ROLE_ADMIN for /admin*
-        - { path: ^/api/(trainings|challenge|participant|user), roles: ROLE_ADMIN }
+        - { path: ^/api/(challenge|participant|user), roles: ROLE_ADMIN }

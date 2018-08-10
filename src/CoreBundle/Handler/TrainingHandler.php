@@ -23,7 +23,8 @@ class TrainingHandler implements TrainingProcessorInterface
      * UserHandler constructor.
      * @param TrainingService $trainingService
      */
-    public function __construct(TrainingService $trainingService) {
+    public function __construct(TrainingService $trainingService)
+    {
         $this->trainingService = $trainingService;
     }
 

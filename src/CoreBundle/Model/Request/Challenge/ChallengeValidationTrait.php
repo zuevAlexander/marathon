@@ -91,5 +91,5 @@ trait ChallengeValidationTrait
     /**
      * @var ArrayCollection
      */
-    protected $participants;
+    private $participants;
 }

@@ -148,7 +148,7 @@ class Participant implements  EntityInterface
     /**
      * @return \DateTime
      */
-    public function getFinishDate(): \DateTime
+    public function getFinishDate()
     {
         return $this->finishDate;
     }

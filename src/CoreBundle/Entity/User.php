@@ -18,6 +18,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements  UserInterface, NDUserInterface
 {
     use EntityTrait;
+
+    const ROLE_USER = 'user';
+    const ROLE_ADMIN = 'admin';
+
     /**
      * @var int
      *
@@ -34,24 +38,15 @@ class User implements  UserInterface, NDUserInterface
     /**
      * @var string
      *
-     * @Assert\Length(
-     *     min="4",
-     *     max="255"
-     * )
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", unique=true)
      */
-    private $username;
+    private $name;
 
     /**
      * @var string
      *
-     * @Assert\Length(
-     *     min="4",
-     *     max="255"
-     * )
-     * @Assert\NotBlank()
      *
      * @ORM\Column(name="email", type="string", unique=true)
      */
@@ -60,27 +55,9 @@ class User implements  UserInterface, NDUserInterface
     /**
      * @var string
      *
-     * @Assert\Length(
-     *     min="4",
-     *     max="255"
-     * )
-     * @Assert\NotBlank()
-     *
-     * @JMS\Exclude()
-     *
-     * @ORM\Column(name="password", type="string")
+     * @ORM\Column(name="full_name", type="string", unique=false, nullable=true)
      */
-    private $password;
-
-    /**
-     * @var string
-     *
-     * @JMS\Type("string")
-     * @JMS\Groups({"post_user_login", "post_user_register"})
-     *
-     * @ORM\Column(type="string", unique=true)
-     */
-    private $apiKey;
+    private $fullName;
 
     /**
      * @var array
@@ -120,22 +97,6 @@ class User implements  UserInterface, NDUserInterface
     }
 
     /**
-     * @return mixed
-     */
-    public function getApiKey()
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @param mixed $apiKey
-     */
-    public function setApiKey($apiKey)
-    {
-        $this->apiKey = $apiKey;
-    }
-
-    /**
      * @return int|null
      */
     public function getId()
@@ -144,21 +105,33 @@ class User implements  UserInterface, NDUserInterface
     }
 
     /**
+     * Returns the username used to authenticate the user requires JWTManager
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Returns the username used to authenticate the user requires UserInterface
+     *
      * @return string
      */
     public function getUsername()
     {
-        return $this->username;
+        return $this->name;
     }
 
     /**
-     * @param string $username
+     * @param string $name
      *
      * @return User
      */
-    public function setUsername(string $username): self
+    public function setUsername(string $name): self
     {
-        $this->username = $username;
+        $this->name = $name;
 
         return $this;
     }
@@ -186,21 +159,28 @@ class User implements  UserInterface, NDUserInterface
     /**
      * @return string
      */
-    public function getPassword()
+    public function getFullName(): string
     {
-        return $this->password;
+        return $this->fullName;
     }
 
     /**
-     * @param string $password
-     *
+     * @param string $fullName
      * @return User
      */
-    public function setPassword(string $password): self
+    public function setFullName(string $fullName): self
     {
-        $this->password = $password;
+        $this->fullName = $fullName;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return '';
     }
 
     /**
@@ -219,6 +199,14 @@ class User implements  UserInterface, NDUserInterface
     {
         $this->roles = $roles;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHighestRole(): string
+    {
+        return in_array('ROLE_ADMIN', $this->roles) ? self::ROLE_ADMIN : self::ROLE_USER;
     }
 
     public function getSalt()

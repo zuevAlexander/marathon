@@ -34,3 +34,9 @@ api_participant:
   prefix: /api
   defaults:
     _format: json
+api_ldap_authorization:
+  resource: '@ApiBundle/Controller/LDAPAuthorizationController.php'
+  type: rest
+  prefix: /api
+  defaults:
+    _format: json

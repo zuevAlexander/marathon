@@ -23,7 +23,8 @@ class VoteHandler implements ProcessorInterface
      * VoterHandler constructor.
      * @param VoteService $voteService
      */
-    public function __construct(VoteService $voteService) {
+    public function __construct(VoteService $voteService)
+    {
         $this->voteService = $voteService;
     }
 

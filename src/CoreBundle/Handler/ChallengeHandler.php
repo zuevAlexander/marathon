@@ -26,7 +26,8 @@ class ChallengeHandler implements ChallengeProcessorInterface
      * ChallengeHandler constructor.
      * @param ChallengeService $challengeService
      */
-    public function __construct(ChallengeService $challengeService) {
+    public function __construct(ChallengeService $challengeService)
+    {
         $this->challengeService = $challengeService;
     }
 
