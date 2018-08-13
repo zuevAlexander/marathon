@@ -53,6 +53,6 @@ class TrainingHandler implements TrainingProcessorInterface
      */
     public function processDelete(TrainingDeleteRequest $request): Training
     {
-        return $this->trainingService->deleteEntity($request->getTraining());
+        return $this->trainingService->deleteTraining($request->getTraining());
     }
 }

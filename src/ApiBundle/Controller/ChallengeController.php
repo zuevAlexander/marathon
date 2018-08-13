@@ -8,6 +8,7 @@ use CoreBundle\Form\Challenge\ChallengeDeleteType;
 use CoreBundle\Form\Challenge\ChallengeListType;
 use CoreBundle\Form\Challenge\ChallengeCreateType;
 use CoreBundle\Form\Challenge\ChallengeReadType;
+use CoreBundle\Form\Challenge\ChallengeJoinType;
 use RestBundle\Controller\BaseController;
 use RestBundle\Handler\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Class ChallengeController.
@@ -39,6 +41,8 @@ class ChallengeController extends BaseController
      *      403 = "Forbidden"
      *  }
      *)
+     *
+     * @Security("has_role('ROLE_ADMIN')")
      *
      * @param Request $request
      *
@@ -118,8 +122,13 @@ class ChallengeController extends BaseController
      *      "403" = "Forbidden",
      *   },
      * )
+     *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      * @param Request $request
+     *
      * @param Challenge $challenge
+     *
      * @return Response
      */
     public function putAction(Request $request, Challenge $challenge): Response
@@ -143,13 +152,46 @@ class ChallengeController extends BaseController
      *      "403" = "Forbidden",
      *   },
      * )
+     *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      * @param Request $request
+     *
      * @param Challenge $challenge
+     *
      * @return Response
      */
     public function deleteAction(Request $request, Challenge $challenge): Response
     {
         return $this->process($request, ChallengeDeleteType::class);
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  section="Challenge",
+     *  description="Create a new Challenge",
+     *  input={
+     *       "class" = "CoreBundle\Form\Challenge\ChallengeJoinType",
+     *       "name" = ""
+     *  },
+     *  statusCodes={
+     *      200 = "Ok",
+     *      204 = "Entity not found",
+     *      400 = "Bad format",
+     *      403 = "Forbidden"
+     *  }
+     *)
+     *
+     * @Annotations\Post("/challenge/{challenge}/join")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function postJoinAction(Request $request, Challenge $challenge) : Response
+    {
+        return $this->process($request, ChallengeJoinType::class, Response::HTTP_CREATED);
     }
 
     /**

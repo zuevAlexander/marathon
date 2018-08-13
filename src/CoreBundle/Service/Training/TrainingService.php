@@ -69,9 +69,7 @@ class TrainingService extends AbstractService
      */
     public function createTraining(TrainingCreateRequest $request): Training
     {
-        if (false === $this->authChecker->isGranted('ROLE_ADMIN') && $request->getParticipant()->getUser() != $this->currentUser) {
-            throw new BadCredentialsException();
-        }
+        $this->hasAccessToTraining($request->getParticipant()->getUser());
 
         $participant = $request->getParticipant();
 
@@ -120,6 +118,8 @@ class TrainingService extends AbstractService
     {
         $training = $request->getTraining();
 
+        $this->hasAccessToTraining($training->getDay()->getParticipant()->getUser());
+
         if ($request->getTraining()) {
             $training->setAmount($request->getAmount());
             $this->saveEntity($training);
@@ -128,5 +128,27 @@ class TrainingService extends AbstractService
         $this->dayService->prepareData($training->getDay());
 
         return $training;
+    }
+
+    /**
+     * @param Training $training
+     * @return Training
+     */
+    public function deleteTraining(Training $training): Training
+    {
+        $this->hasAccessToTraining($training->getDay()->getParticipant()->getUser());
+        return $this->deleteEntity($training);
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function hasAccessToTraining(User $user): bool
+    {
+        if (false === $this->authChecker->isGranted('ROLE_ADMIN') && $user != $this->currentUser) {
+            throw new BadCredentialsException();
+        }
+        return true;
     }
 }

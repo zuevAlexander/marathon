@@ -2,6 +2,8 @@
 namespace CoreBundle\Service\Participant;
 
 use CoreBundle\Entity\Day;
+use CoreBundle\Entity\User;
+use CoreBundle\Entity\Challenge;
 use CoreBundle\Entity\Participant;
 use CoreBundle\Exception\Participant\ParticipantAlreadyExistsException;
 use CoreBundle\Model\Request\Participant\ParticipantCreateRequest;
@@ -41,23 +43,24 @@ class ParticipantService extends AbstractService
     }
 
     /**
-     * @param ParticipantCreateRequest $request
+     * @param Challenge $challenge
+     * @param User $user
      * @return Participant
      */
-    public function createParticipant(ParticipantCreateRequest $request): Participant
+    public function createParticipant(Challenge $challenge, User $user): Participant
     {
         try {
-            $this->getEntityBy(['user' => $request->getUser(), 'challenge' => $request->getChallenge()]);
+            $this->getEntityBy(['user' => $user, 'challenge' => $challenge]);
             throw new ParticipantAlreadyExistsException();
         } catch (EntityNotFoundException $e) {
             // we haven't found participant - that's ok
         }
 
         $participant = $this->createEntity();
-        $participant->setUser($request->getUser());
-        $participant->setChallenge($request->getChallenge());
+        $participant->setUser($user);
+        $participant->setChallenge($challenge);
 
-        $challengeDuration = ($request->getChallenge()->getEndDate()->getTimestamp() - $request->getChallenge()->getStartDate()->getTimestamp()) / 60 / 60 / 24 + 1;
+        $challengeDuration = ($challenge->getEndDate()->getTimestamp() - $challenge->getStartDate()->getTimestamp()) / 60 / 60 / 24 + 1;
         $participant = $this->fillDays($participant, $challengeDuration);
 
         $this->saveEntity($participant);

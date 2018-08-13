@@ -3,6 +3,8 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Entity\Challenge;
+use CoreBundle\Entity\Participant;
+use CoreBundle\Model\Request\Challenge\ChallengeJoinRequest;
 use CoreBundle\Model\Request\Challenge\ChallengeListRequest;
 use CoreBundle\Model\Request\Challenge\ChallengeCreateRequest;
 use CoreBundle\Model\Request\Challenge\ChallengeReadRequest;
@@ -74,5 +76,15 @@ class ChallengeHandler implements ChallengeProcessorInterface
     public function processDelete(ChallengeDeleteRequest $request): Challenge
     {
         return $this->challengeService->deleteEntity($request->getChallenge());
+    }
+
+    /**
+     *
+     * @param ChallengeJoinRequest $request
+     * @return Participant
+     */
+    public function processPostJoin(ChallengeJoinRequest $request) : Participant
+    {
+        return $this->challengeService->joinChallenge($request->getChallenge());
     }
 }

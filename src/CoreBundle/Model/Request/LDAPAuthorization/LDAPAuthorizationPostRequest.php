@@ -3,16 +3,29 @@
 namespace CoreBundle\Model\Request\LDAPAuthorization;
 
 use RestBundle\Request\AbstractRequest;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class LDAPAuthorizationPostRequest extends AbstractRequest
 {
     /**
      * @var string
+     *
+     * @Assert\Length(
+     *     min="2",
+     *     max="255"
+     * )
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @var string
+     *
+     * @Assert\Length(
+     *     min="2",
+     *     max="255"
+     * )
+     * @Assert\NotBlank()
      */
     private $password;
 

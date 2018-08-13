@@ -4,8 +4,6 @@ security:
             entity:
                 class: CoreBundle\Entity\User
                 property: name
-        in_memory:
-            memory: ~
 
     firewalls:
         login:
@@ -42,6 +40,7 @@ security:
 
         api:
             pattern:   ^/api
+            stateless: true
             provider: user_provider
             guard:
                 authenticators:
@@ -51,5 +50,4 @@ security:
             anonymous: ~
 
     access_control:
-        # require ROLE_ADMIN for /admin*
-        - { path: ^/api/(challenge|participant|user), roles: ROLE_ADMIN }
+        - { path: ^/api/(participant|user), roles: ROLE_ADMIN }

@@ -35,7 +35,7 @@ class ParticipantHandler implements ParticipantProcessorInterface
      */
     public function processPost(ParticipantCreateRequest $request) : Participant
     {
-        return $this->participantService->createParticipant($request);
+        return $this->participantService->createParticipant($request->getChallenge(), $request->getUser());
     }
 
     /**

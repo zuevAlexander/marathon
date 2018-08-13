@@ -4,6 +4,7 @@ namespace CoreBundle\Service\Challenge;
 
 use CoreBundle\Entity\Challenge;
 use CoreBundle\Entity\Participant;
+use CoreBundle\Entity\User;
 use CoreBundle\Exception\Challenge\IncorrectMarathonEndDateException;
 use CoreBundle\Exception\Challenge\MarathonAlreadyFinishedException;
 use CoreBundle\Exception\Challenge\MarathonAlreadyStartedException;
@@ -50,6 +51,7 @@ class ChallengeService extends AbstractService
      * @param string $entityClass
      * @param StatusService $statusService
      * @param ParticipantService $participantService
+     * @param DayService $dayService
      */
     public function __construct(ContainerInterface $container, string $entityClass, StatusService $statusService, ParticipantService $participantService, DayService $dayService)
     {
@@ -232,5 +234,14 @@ class ChallengeService extends AbstractService
         }
         
         return $challenge;
+    }
+
+    /**
+     * @param Challenge $challenge
+     * @return Participant
+     */
+    public function joinChallenge(Challenge $challenge): Participant
+    {
+        return $this->participantService->createParticipant($challenge, $this->container->get('security.token_storage')->getToken()->getUser());
     }
 }
